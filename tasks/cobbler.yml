@@ -1,7 +1,7 @@
 ---
 # Setup cobbler for hosts to provisione
 
-- include_tasks: backends/vmware/cobler.yml
+- include_tasks: backends/vmware/cobbler.yml
   when: host_provisioner_vmware_server is defined
 
 - name: Setup cobbler for hosts to provisione
