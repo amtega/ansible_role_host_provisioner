@@ -1,0 +1,20 @@
+---
+# Setup dhcpd for hosts to provisione
+
+- include_tasks: backends/vmware/dhcpd.yml
+  when: host_provisioner_vmware_server is defined
+
+- name: Setup dhcpd for hosts to provisione
+  include_role:
+    name: amtega.dhcpd
+    apply:
+      delegate_to: "{{ host_provisioner_dhcpd_server }}"
+  vars:
+    host_provisioner_vmware_vars: >-
+      {{ hostvars[host_provisioner_vmware_server] }}
+    dhcpd_hosts: >-
+      {{ host_provisioner_vmware_vars.host_provisioner_vmware_dhcpd_hosts
+         | map("combine", { "state": host_provisioner_dhcpd_hosts_state }) }}
+    dhcpd_delete_unmanaged: no
+
+- meta: flush_handlers

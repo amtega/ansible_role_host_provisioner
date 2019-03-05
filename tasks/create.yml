@@ -1,0 +1,5 @@
+---
+# Create hosts
+
+- include_tasks: backends/vmware/create.yml
+  when: host_provisioner_vmware_server is defined

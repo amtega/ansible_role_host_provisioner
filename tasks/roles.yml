@@ -1,0 +1,89 @@
+---
+# Install hosts
+
+- name: Wait for hosts connection
+  wait_for:
+    host: "{{ host_provisioner_host_vars.ansible_host }}"
+    port: "{{ host_provisioner_host_vars.ansible_port | default(22) }}"
+    sleep: "{{ host_provisioner_wait_for_connection_sleep }}"
+    delay: "{{ host_provisioner_wait_for_connection_delay }}"
+    timeout: "{{ host_provisioner_wait_for_connection_timeout }}"
+  loop: "{{ groups[host_provisioner_group] }}"
+  loop_control:
+    loop_var: host_provisioner_host_item
+  vars:
+    host_provisioner_host_vars: >-
+      {{ hostvars[host_provisioner_host_item] }}
+
+- name: Pause before applying ansible roles
+  pause:
+    seconds: "{{ host_provisioner_before_ansible_pause }}"
+  delegate_to: "{{ host_provisioner_host_item }}"
+  loop: "{{ groups[host_provisioner_group] }}"
+  loop_control:
+    loop_var: host_provisioner_host_item
+
+- include_role:
+    name: "{{ host_provisioner_item.1 }}"
+    apply:
+      delegate_to: "{{ host_provisioner_item.0 }}"
+  loop: >-
+    {{ groups[host_provisioner_group] | product(host_provisioner_roles) }}
+  loop_control:
+    loop_var: host_provisioner_host_item
+
+- include_role:
+    name: "{{ host_provisioner_item.1 }}"
+    apply:
+      delegate_to: "{{ host_provisioner_item.0 }}"
+  loop: >-
+    {{ groups[host_provisioner_group]
+       | product(host_provisioner_roles_mandatory) }}
+  loop_control:
+    loop_var: host_provisioner_host_item
+  vars:
+    iptables_load_from_hostvars: no
+    iptables_zones:
+      - name: "{{ host_provisioner_iptables_ssh_zone }}"
+        interfaces:
+          - "{{ ansible_facts.default_ipv4.interface }}"
+          - "{{ host_provisioner_host_management_interface }}"
+    iptables_services:
+      - name: ssh
+        ports: "{{ hostvars[host_provisioner_item.0].sshd_port | default(22) }}"
+        zones: "{{ host_provisioner_iptables_ssh_zone }}"
+    iptables_input_raw_rules:
+      - "-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT"
+      - "-A INPUT -p icmp -m state --state RELATED -j ACCEPT"
+      - "-A INPUT -p icmp -m icmp --icmp-type 4 -j ACCEPT"
+      - "-A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT"
+      - "-A INPUT -p icmp -j DROP"
+    sshd_reload: no
+    sshd_restart: no
+    network_interfaces: "{{ host_provisioner_vmware_nics }}"
+    reboot_disable: yes
+
+- name: pause after applying ansible roles
+  pause:
+    seconds: "{{ host_provisioner_after_ansible_pause }}"
+  loop: "{{ groups[host_provisioner_group] }}"
+  loop_control:
+    loop_var: host_provisioner_host_item
+
+- name: release dhcp address
+  command: dhclient -r
+  changed_when: yes
+  loop: "{{ groups[host_provisioner_group] }}"
+  loop_control:
+    loop_var: host_provisioner_host_item
+
+- name: force host shutdown
+  command: /bin/true
+  changed_when: yes
+  loop: "{{ groups[host_provisioner_group] }}"
+  loop_control:
+    loop_var: host_provisioner_host_item
+  notify:
+    - halt host
+
+- meta: flush_handlers

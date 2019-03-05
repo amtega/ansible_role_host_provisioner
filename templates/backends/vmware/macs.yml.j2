@@ -1,0 +1,12 @@
+{% set ns = namespace(found=false) %}
+
+{% for instance in vmware_provisioner_vms_setup_result.results
+   | map(attribute="instance")
+   | list %}
+{% set ns.found = true %}
+"{{ instance.hw_name }}": "{{ instance.hw_eth0.macaddress }}"
+{% endfor %}
+
+{% if not ns.found %}
+{}
+{% endif %}

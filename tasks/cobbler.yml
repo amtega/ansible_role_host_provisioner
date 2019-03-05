@@ -1,0 +1,18 @@
+---
+# Setup cobbler for hosts to provisione
+
+- include_tasks: backends/vmware/cobler.yml
+  when: host_provisioner_vmware_server is defined
+
+- name: Setup cobbler for hosts to provisione
+  include_role:
+    name: amtega.cobbler
+    apply:
+      delegate_to: "{{ host_provisioner_cobbler_server }}"
+  vars:
+    cobbler_delete_unmanaged: no
+    cobbler_systems: >-
+      {{ hostvars[host_provisioner_vmware_server]
+         .host_provisioner_vmware_cobbler_systems }}"
+
+- meta: flush_handlers

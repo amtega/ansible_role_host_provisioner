@@ -1,0 +1,5 @@
+---
+# Power on hosts to provisione
+
+- include_tasks: backends/vmware/poweron.yml
+  when: host_provisioner_vmware_server is defined

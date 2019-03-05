@@ -1,2 +1,20 @@
 ---
 # Role tasks
+
+- include_tasks: stalled.yml
+- include_tasks: create.yml
+
+- include_tasks: dhcpd.yml
+  vars:
+    host_provisioner_dhcpd_hosts_state: present
+
+- include_tasks: cobbler.yml
+- include_tasks: poweron.yml
+- include_tasks: inventory.yml
+- include_tasks: nics.yml
+- include_tasks: roles.yml
+- include_tasks: finalize.yml
+
+- include_tasks: dhcpd.yml
+  vars:
+    host_provisioner_dhcpd_hosts_state: absent

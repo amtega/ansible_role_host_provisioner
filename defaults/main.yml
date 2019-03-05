@@ -1,2 +1,51 @@
 ---
 # Role default lower priority variables
+
+host_proovisioner_roles:
+  - amtega.users
+  - amtega.groups
+  - amtega.selinux
+
+host_provisioner_dhcpd_server: "{{ inventory_hostname }}"
+
+host_provisioner_dhcpd_prov_net_name: provisioning
+
+host_provisioner_cobbler_server: "{{ inventory_hostname }}"
+
+host_provisioner_vmware_server: "{{ inventory_hostname }}"
+
+host_provisioner_vmware_prov_net_name:
+
+host_provisioner_vmware_prov_net_type: vmxnet3
+
+host_provisioner_iptables_ssh_zone: MANAGEMENT
+
+host_provisioner_host_management_interface:
+
+host_provisioner_ansible_user: root
+host_provisioner_ansible_ssh_pass: "{{ group_cobbler_root_password }}"
+host_provisioner_ansible_become: no
+host_provisione__ansible_become_method: su
+host_provisioner_ansible_become_user: root
+host_provisioner_ansible_become_pass: password
+host_provisioner_ssh_common_args: >-
+  -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+host_provisioner_group: host_provisioner_hosts
+
+host_provisioner_wait_for_connection_sleep: 5
+host_provisioner_wait_for_connection_delay: 5
+host_provisioner_wait_for_connection_timeout: 900
+host_provisioner_stalled_timeout: 600
+host_provisioner_force_stalled_removal: no
+
+host_provisioner_before_ansible_pause: 10
+host_provisioner_after_ansible_pause: 10
+
+
+
+host_provisioner_vmware_dhcp_pause: 10
+
+
+host_provisioner_vmware_guest_id_to_cobbler_profile_map: {}
+
+host_provisioner_vmware_mac_generation_retries: 3

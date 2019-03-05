@@ -1,0 +1,8 @@
+---
+# Setup fact with VMware cobbler systems
+
+- name: Setup fact with VMware cobbler systems
+  set_fact:
+    host_provisioner_vmware_cobbler_systems: >-
+      {{ lookup('template', 'backends/vmware/cobbler.yml.j2') | from_yaml }}
+  delegate_to: "{{ host_provisioner_vmware_server }}"

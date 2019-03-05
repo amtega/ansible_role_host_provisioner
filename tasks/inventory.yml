@@ -1,0 +1,40 @@
+---
+# Add provisioned hosts to in-memory inventory
+
+- name: Gather ip addresses given by dhcpd server
+  command: dhcp-lease-list
+  register: host_provisioner_dhcpd_lease_result
+  changed_when: false
+  loop: "{{ host_provisioner_vmware_macs.keys() | list }}"
+  until: >-
+    host_provisioner_dhcpd_lease_result.stdout_lines
+    | select("search",
+             "^"
+             + host_provisioner_vmware_macs[host_provisioner_host_item]
+             + " .*$")
+    | list
+    | length > 0
+  retries: 10
+  delay: 3
+  loop_control:
+    loop_var: host_provisioner_host_item
+    label: "{{ host_provisioner_host_item }}"
+  delegate_to: "{{ host_provisioner_dhcpd_server }}"
+
+- name: Add provisioned hosts to in-memory inventory
+  add_host:
+    name: "{{ host_provisioner_host_ip_item.key }}"
+    ansible_host: "{{ host_provisioner_host_ip_item.value }}"
+    ansible_user: "{{ host_provisioner_ansible_user }}"
+    ansible_ssh_pass: "{{ host_provisioner_ansible_ssh_pass }}"
+    ansible_ssh_common_args: "{{ host_provisioner_ssh_common_args }}"
+    ansible_become: "{{ host_provisioner_ansible_become }}"
+    ansible_become_method: "{{ host_provisioner_ansible_become_method }}"
+    ansible_become_user: "{{ host_provisioner_ansible_become_user }}"
+    ansible_become_pass: "{{ host_provisioner_ansible_become_pass }}"
+    groups: "{{ host_provisioner_groups }}"
+  changed_when: no
+  loop: "{{ lookup('template', 'ips.j2') | from_yaml | dict2items }}"
+  loop_control:
+    loop_var: host_provisioner_host_ip_item
+    label: "{{ host_provisioner_host_ip_item.key }}"

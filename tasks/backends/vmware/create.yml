@@ -1,0 +1,19 @@
+---
+# Create VMWare hosts
+
+- name: Create VMware hosts
+  include_role:
+    name: amtega.vmware_provisioner
+    apply:
+      delegate_to: "{{ host_provisioner_vmware_server }}"
+  vars:
+    vmware_provisioner_vms: >
+      {{ host_provisioner_vmware_vms_filtered.to_provisione
+         | map("combine", host_provisioner_vmware_vm_overrides)
+         | list }}
+
+- name: Setup fact with created VMware hosts mac addresses
+  set_fact:
+    host_provisioner_vmware_macs: >-
+      {{ lookup("template", "backends/vmware/macs.yml.j2") | from_yaml }}
+  delegate_to: "{{ host_provisioner_vmware_server }}"

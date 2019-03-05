@@ -1,0 +1,26 @@
+---
+# Finalize VMware hosts provisioning
+
+- name: Finalize VMware hosts config
+  include_role:
+    name: amtega.vmware_provisioner
+    apply:
+      delegate_to: "{{ host_provisioner_vmware_server }}"
+  vars:
+    vmware_provisioner_vms: >-
+      {{ lookup("template",
+                "vms.yml.j2")
+         | from_yaml
+         | map("combine", { "state": "present" })
+         | list }}
+
+- name: Finalize WMware hosts provisioning
+  include_role:
+    name: amtega.vmware_provisioner
+    apply:
+      delegate_to: "{{ host_provisioner_vmware_server }}"
+  vars:
+      vmware_provisioner_vms: >-
+        {{ lookup("template",
+                  "vms.j2")
+           | from_yaml }}
