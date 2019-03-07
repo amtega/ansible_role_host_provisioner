@@ -6,6 +6,7 @@
     name: amtega.vmware_provisioner
     apply:
       delegate_to: "{{ host_provisioner_vmware_server }}"
+      delegate_facts: yes
   vars:
     vmware_provisioner_vms: >
       {{ host_provisioner_vmware_vms_filtered.to_provisione
@@ -17,3 +18,4 @@
   pause:
     seconds: "{{ host_provisioner_vmware_dhcp_pause }}"
   delegate_to: "{{ host_provisioner_vmware_server }}"
+  delegate_facts: yes

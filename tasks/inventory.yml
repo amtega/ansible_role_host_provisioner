@@ -20,6 +20,7 @@
     loop_var: host_provisioner_host_item
     label: "{{ host_provisioner_host_item }}"
   delegate_to: "{{ host_provisioner_dhcpd_server }}"
+  delegate_facts: yes
 
 - name: Add provisioned hosts to in-memory inventory
   add_host:

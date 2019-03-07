@@ -6,6 +6,7 @@
     name: amtega.vmware_provisioner
     apply:
       delegate_to: "{{ host_provisioner_vmware_server }}"
+      delegate_facts: yes
   vars:
     vmware_provisioner_vms: >-
       {{ lookup("template",
@@ -19,6 +20,7 @@
     name: amtega.vmware_provisioner
     apply:
       delegate_to: "{{ host_provisioner_vmware_server }}"
+      delegate_facts: yes
   vars:
       vmware_provisioner_vms: >-
         {{ lookup("template",

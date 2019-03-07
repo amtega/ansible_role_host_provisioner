@@ -19,6 +19,7 @@
   pause:
     seconds: "{{ host_provisioner_before_ansible_pause }}"
   delegate_to: "{{ host_provisioner_host_item }}"
+  delegate_facts: yes
   loop: "{{ groups[host_provisioner_group] }}"
   loop_control:
     loop_var: host_provisioner_host_item
@@ -27,6 +28,7 @@
     name: "{{ host_provisioner_item.1 }}"
     apply:
       delegate_to: "{{ host_provisioner_item.0 }}"
+      delegate_facts: yes
   loop: >-
     {{ groups[host_provisioner_group] | product(host_provisioner_roles) }}
   loop_control:
@@ -36,6 +38,7 @@
     name: "{{ host_provisioner_item.1 }}"
     apply:
       delegate_to: "{{ host_provisioner_item.0 }}"
+      delegate_facts: yes
   loop: >-
     {{ groups[host_provisioner_group]
        | product(host_provisioner_roles_mandatory) }}

@@ -1,17 +1,24 @@
 ---
 # Remove stalled vmware hosts
 
+- name: Gather facts from VMware server
+  setup:
+  delegate_to: "{{ host_provisioner_vmware_server }}"
+  delegate_facts: yes
+
 - name: Setup fact with filtered VMware hosts
   set_fact:
     host_provisioner_vmware_vms_filtered: >-
       {{ lookup('template', 'backends/vmware/filter.yml.j2') | from_yaml }}
   delegate_to: "{{ host_provisioner_vmware_server }}"
+  delegate_facts: yes
 
 - name: Remove stalled VMware hosts
   include_role:
     name: amtega.vmware_provisioner
     apply:
       delegate_to: "{{ host_provisioner_vmware_server }}"
+      delegate_facts: yes
   vars:
     vmware_provisioner_vms: >-
       {{ host_provisioner_vmware_vms_filtered.stalled

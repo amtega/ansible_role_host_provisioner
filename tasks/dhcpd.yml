@@ -1,6 +1,11 @@
 ---
 # Setup dhcpd for hosts to provisione
 
+- name: Gather facts from dhcpd server
+  setup:
+  delegate_to: "{{ host_provisioner_dhcpd_server }}"
+  delegate_facts: yes
+
 - include_tasks: backends/vmware/dhcpd.yml
   when: host_provisioner_vmware_server is defined
 
@@ -9,6 +14,7 @@
     name: amtega.dhcpd
     apply:
       delegate_to: "{{ host_provisioner_dhcpd_server }}"
+      delegate_facts: yes
   vars:
     host_provisioner_vmware_vars: >-
       {{ hostvars[host_provisioner_vmware_server] }}

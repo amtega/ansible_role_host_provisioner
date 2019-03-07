@@ -1,6 +1,11 @@
 ---
 # Setup cobbler for hosts to provisione
 
+- name: Gather facts from cobbler server
+  setup:
+  delegate_to: "{{ host_provisioner_cobbler_server }}"
+  delegate_facts: yes
+
 - include_tasks: backends/vmware/cobbler.yml
   when: host_provisioner_vmware_server is defined
 
@@ -9,6 +14,7 @@
     name: amtega.cobbler
     apply:
       delegate_to: "{{ host_provisioner_cobbler_server }}"
+      delegate_facts: yes
   vars:
     cobbler_delete_unmanaged: no
     cobbler_systems: >-
