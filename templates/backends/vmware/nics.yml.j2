@@ -7,15 +7,15 @@
 
 {%- set ns = namespace(found=false, generated_macs=[], mac={}, mac_found=false) -%}
 
-{%- set vmware_provisioner_instances = vmware_provisioner_vms_setup_result.results
-                                   | selectattr("instance", "defined")
-                                   | map(attribute="instance")
-                                   | list -%}
+{%- set vmware_provisioner_instances = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_setup_result.results
+                                       | selectattr("instance", "defined")
+                                       | map(attribute="instance")
+                                       | list -%}
 
-{%- for vm in vmware_hosts_to_provisione -%}
+{%- for vm in hostvars[host_provisioner_vmware_server].host_provisioner_vmware_vms_filtered.to_provisione -%}
     {%- set instance_list = vmware_provisioner_instances
-                           | selectattr("hw_name", "equalto", vm.name)
-                           | list -%}
+                            | selectattr("hw_name", "equalto", vm.name)
+                            | list -%}
 
     {%- if instance_list | length == 1 -%}
         {%- set instance = instance_list | first -%}

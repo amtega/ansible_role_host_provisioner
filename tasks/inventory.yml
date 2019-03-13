@@ -33,9 +33,9 @@
     ansible_become_method: "{{ host_provisioner_ansible_become_method }}"
     ansible_become_user: "{{ host_provisioner_ansible_become_user }}"
     ansible_become_pass: "{{ host_provisioner_ansible_become_pass }}"
-    groups: "{{ host_provisioner_groups }}"
+    groups: "{{ [ host_provisioner_group ] }}"
   changed_when: no
-  loop: "{{ lookup('template', 'ips.j2') | from_yaml | dict2items }}"
+  loop: "{{ lookup('template', 'ips.yml.j2') | from_yaml | dict2items }}"
   loop_control:
     loop_var: host_provisioner_host_ip_item
     label: "{{ host_provisioner_host_ip_item.key }}"

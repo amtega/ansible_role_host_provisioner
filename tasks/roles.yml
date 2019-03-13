@@ -25,23 +25,26 @@
     loop_var: host_provisioner_host_item
 
 - include_role:
-    name: "{{ host_provisioner_item.1 }}"
+    name: "{{ host_provisioner_host_item.1 }}"
     apply:
-      delegate_to: "{{ host_provisioner_item.0 }}"
+      delegate_to: "{{ host_provisioner_host_item.0 }}"
       delegate_facts: yes
   loop: >-
-    {{ groups[host_provisioner_group] | product(host_provisioner_roles) }}
+    {{ groups[host_provisioner_group]
+       | product(host_provisioner_roles)
+       | list }}
   loop_control:
     loop_var: host_provisioner_host_item
 
 - include_role:
-    name: "{{ host_provisioner_item.1 }}"
+    name: "{{ host_provisioner_host_item.1 }}"
     apply:
-      delegate_to: "{{ host_provisioner_item.0 }}"
+      delegate_to: "{{ host_provisioner_host_item.0 }}"
       delegate_facts: yes
   loop: >-
     {{ groups[host_provisioner_group]
-       | product(host_provisioner_roles_mandatory) }}
+       | product(host_provisioner_roles_mandatory)
+       | list }}
   loop_control:
     loop_var: host_provisioner_host_item
   vars:
@@ -50,10 +53,11 @@
       - name: "{{ host_provisioner_iptables_ssh_zone }}"
         interfaces:
           - "{{ ansible_facts.default_ipv4.interface }}"
-          - "{{ host_provisioner_host_management_interface }}"
+          - "{{ host_provisioner_iptables_ssh_interface }}"
     iptables_services:
       - name: ssh
-        ports: "{{ hostvars[host_provisioner_item.0].sshd_port | default(22) }}"
+        ports: >-
+          {{ hostvars[host_provisioner_host_item.0].sshd_port | default(22) }}
         zones: "{{ host_provisioner_iptables_ssh_zone }}"
     iptables_input_raw_rules:
       - "-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT"

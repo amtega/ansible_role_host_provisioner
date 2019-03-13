@@ -1,29 +1,68 @@
 ---
+# Role dependencies
+
+galaxy_info:
+  role_name: host_provisioner
+  author: Juan Antonio Valiño García
+  description: Provisione hosts orchestrating several roles and backends.
+  company: AMTEGA - Xunta de Galicia
+  license: GPLv3 or EUPL
+  min_ansible_version: 2.7
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Fedora
+      versions:
+        - 27
+        - 28
+  galaxy_tags:
+    - system
+    - dhcp
+    - cobbler
+    - provisione
+    - vmware
 
 dependencies:
+  - role: amtega.check_platform
+    check_platform_distributions:
+      centos: 7
+      fedora: 27
+      rhel: 7
+    tags:
+      - role::host_provisioner
+
   - role: amtega.vmware_provisioner
-    vmware_provisioner_gather_detailed_vm_facts: yes
-    vmware_provisioner_gather_inventory_vm_configs: yes
-    vmware_provisioner_manage_inventory_vms: no
+    vars:
+      vmware_provisioner_gather_detailed_vm_facts: yes
+      vmware_provisioner_gather_inventory_vm_configs: yes
+      vmware_provisioner_manage_inventory_vms: no
     when: host_provisioner_vmware_server is defined
 
   - role: amtega.users
-    when: false
+    tags:
+      - never
 
   - role: amtega.groups
-    when: false
+    tags:
+      - never
 
   - role: amtega.iptables
-    when: false
+    tags:
+      - never
 
   - role: amtega.selinux
-    when: false
+    tags:
+      - never
 
   - role: amtega.sshd
-    when: false
+    tags:
+      - never
 
   - role: amtega.network_interfaces
-    when: false
+    tags:
+      - never
 
   - role: amtega.halt
-    when: false
+    tags:
+      - never

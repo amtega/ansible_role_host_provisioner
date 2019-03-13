@@ -19,6 +19,6 @@
     cobbler_delete_unmanaged: no
     cobbler_systems: >-
       {{ hostvars[host_provisioner_vmware_server]
-         .host_provisioner_vmware_cobbler_systems }}"
+         .host_provisioner_vmware_cobbler_systems }}
 
 - meta: flush_handlers

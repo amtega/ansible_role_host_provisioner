@@ -1,62 +1,44 @@
-# Ansible <!-- this role name --> role
+# Ansible host_provisioner role
 
-This is an [Ansible](http://www.ansible.com) role which <!-- brief description of the role goes here -->.
+This is an [Ansible](http://www.ansible.com) role that provisione hosts orchestrating several roles and backends.
+
+Currently only VMware backend is supported.
+
+The provisioning flow is the following:
+
+1. Using a provisioning backend, create a host (typically a virtual machine) with a single network interface within a provisioning network
+2. Setup a host in the dhcpd server for the host to provisione
+3. Setup a system in cobbler to install the host to provisione
+4. Power on the host to provisione
+5. The host will get a temporary network address form dhcpd server
+6. The host to provisione will be installed using cobbler
+6. Apply to the provisioned host a set of optional roles (see `host_provisioner_roles` variable in `defaults/main.yml`)
+7. Apply to the provisioned host a set of mandatory roles (see `host_provisioner_roles_mandatory` variable in `vars/main.yml`)
+8. Using a backend, configure the host with the final network interfaces.
+9. Poweroff the host to provisione
+10. Poweron the host to provisione
 
 ## Requirements
 
-<!-- Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required. For example: -->
+1. A dhcpd host configured with [amtega.dhcpd](https://galaxy.ansible.com/amtega/dhcpd) role. Within this host you need a network for provisioning, which name you must pass to the `host_provisioner_dhcpd_prov_net_name` variable (see `defaults/main.yml` for details)
 
-[Ansible 2.7+](http://docs.ansible.com/ansible/latest/intro_installation.html)
+2. A cobbler host configured with [amtega.cobbler](https://galaxy.ansible.com/amtega/cobbler) role. Within this host you must configure all distros and profiles you need to install new hosts.
+
+3. Server with Access to VMWARE vCenter/ESX. You must configure in your inventory all connection variables required by the [amtega.vmware_provisioner](https://galaxy.ansible.com/amtega/vmware_provisioner) role.
+
+All the previous requirements can be fulfilled with multiple machines or in a single host.
 
 ## Role Variables
-
-<!-- A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well. For example: -->
 
 A list of all the default variables for this role is available in `defaults/main.yml`.
 
 The role also setups the following facts:
 
-- `thisrole_fact1`: description of the fact
-- `thisrole_fact2`: description of the fact
-- `thisrole_factN`: description of the fact
-
-## Filters
-
-<!-- A description of the filters provided by the role should go here. For example: -->
-
-The role provides these filters:
-
-- `thisrole_filter1`: description of the filter
-- `thisrole_filter2`: description of the filter
-- `thisrole_filterN`: description of the filter
-
-## Modules
-
-<!-- A description of the modules provided by the role should go here. For example: -->
-
-The role provides these modules:
-
-- `thisrole_module1`: description of the module
-- `thisrole_module2`: description of the module
-- `thisrole_moduleN`: description of the module
-
-## Tests
-
-<!-- A description of the tests provided by the role should go here. For example: -->
-
-The role provides these tests:
-
-- `thisrole_test1`: description of the test
-- `thisrole_test2`: description of the test
-- `thisrole_testN`: description of the test
-
-## Dependencies
-
-<!-- A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles. For example: -->
-
-- [amtega.check_platform](https://galaxy.ansible.com/amtega/check_platform)
-- [amtega.proxy_client](https://galaxy.ansible.com/amtega/proxy_client)
-- [amtega.packages](https://galaxy.ansible.com/amtega/packages)
+- `host_provisioner_vmware_vms_filtered`: dict indicating the vmware backend hosts to provisione and stalled
+- `host_provisioner_vmware_macs`: dict mapping hostnames with the mac provided by VMware backend
+- `host_provisioner_vmware_nics`: list of dicts with the nics vmware backend will configure
+- `host_provisioner_vmware_dhcpd_hosts`: list of dicts with the hosts vmware backend will pass to the dhcpd server
+- `host_provisioner_vmware_cobbler_systems`: list of dicts with the systems vmware backend will pass to the cobbler server
 
 ## Usage
 
@@ -90,7 +72,7 @@ $ ansible-playbook main.yml
 
 ## License
 
-Copyright (C) <!-- YEAR --> AMTEGA - Xunta de Galicia
+Copyright (C) 2019 AMTEGA - Xunta de Galicia
 
 This role is free software: you can redistribute it and/or modify it under the terms of:
 
@@ -100,6 +82,4 @@ This role is distributed in the hope that it will be useful, but WITHOUT ANY WAR
 
 ## Author Information
 
-- <!-- author _name 1 -->.
-- <!-- author _name 2 -->.
-- <!-- author _name N -->.
+- Juan Antonio Valiño García.

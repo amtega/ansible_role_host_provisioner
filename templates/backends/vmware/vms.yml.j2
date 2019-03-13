@@ -1,8 +1,8 @@
 {%- set ns = namespace(vms=[]) -%}
 
-{%- for vm in host_provisioner_vmware_vms_filtered.to_provisione -%}
+{%- for vm in hostvars[host_provisioner_vmware_server].host_provisioner_vmware_vms_filtered.to_provisione -%}
     {%- set ns_vm = namespace(vmware_vm_networks=[]) -%}
-    {%- set network_interfaces = host_provisioner_vmware_nics[vm.name] -%}
+    {%- set network_interfaces = hostvars[host_provisioner_vmware_server].host_provisioner_vmware_nics[vm.name] -%}
 
     {%- for vmware_network in vm.networks | default([]) -%}
         {%- set mac = { "mac": network_interfaces[loop.index0].macaddress } -%}

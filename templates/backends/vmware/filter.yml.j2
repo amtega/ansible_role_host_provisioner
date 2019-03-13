@@ -1,24 +1,24 @@
 {%- set ns = namespace(to_provisione=[], stalled=[]) -%}
 
-{%- for vm in vmware_provisioner_inventory_vms -%}
+{%- for vm in  hostvars[host_provisioner_vmware_server].vmware_provisioner_inventory_vms -%}
     {%- if vm.uuid is defined -%}
-        {%- set vm_facts = vmware_provisioner_vms_detailed_facts
-                          | selectattr("uuid", "defined")
-                          | selectattr("uuid", "equalto", vm.uuid)
-                          | list -%}
+        {%- set vm_facts = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_detailed_facts
+                           | selectattr("uuid", "defined")
+                           | selectattr("uuid", "equalto", vm.uuid)
+                           | list -%}
     {%- elif vm.name is defined
              and vm.folder is defined -%}
-        {%- set vm_facts = vmware_provisioner_vms_detailed_facts
-                          | selectattr("hw_name", "defined")
-                          | selectattr("hw_folder", "defined")
-                          | selectattr("hw_name", "equalto", vm.name)
-                          | selectattr("hw_folder",
-                                           "search",
-                                           "^.*/vm"
-                                           + vm.folder
-                                             | regex_replace("^.*/vm/(.*)", "\\1")
-                                           + "$")
-                          | list -%}
+        {%- set vm_facts = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_detailed_facts
+                           | selectattr("hw_name", "defined")
+                           | selectattr("hw_folder", "defined")
+                           | selectattr("hw_name", "equalto", vm.name)
+                           | selectattr("hw_folder",
+                                        "search",
+                                        "^.*/vm"
+                                        + vm.folder
+                                          | regex_replace("^.*/vm/(.*)", "\\1")
+                                        + "$")
+                           | list -%}
     {%- endif %}
 
     {%- if vm_facts | length == 1 -%}

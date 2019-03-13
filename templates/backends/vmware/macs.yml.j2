@@ -1,6 +1,6 @@
 {% set ns = namespace(found=false) %}
 
-{% for instance in vmware_provisioner_vms_setup_result.results
+{% for instance in hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_setup_result.results
    | map(attribute="instance")
    | list %}
 {% set ns.found = true %}

@@ -15,8 +15,9 @@
 {% set dhcpd_ip_leases = [] %}
 {% endif %}
 
-{% for host_mac in lookup("dict", hostvars[host_provisioner_vmware_server].host_provisioner_vmware_macs) %}
-{% if dhcpd_ip_leases[host_mac.value | lower] is defined %}
-"{{ host_mac.key }}": "{{ dhcpd_ip_leases[host_mac.value | lower] }}"
+{% set macs_dict =  hostvars[host_provisioner_vmware_server].host_provisioner_vmware_macs %}
+{% for hostname in macs_dict.keys() | list %}
+{% if dhcpd_ip_leases[macs_dict[hostname] | lower] is defined %}
+"{{ hostname }}": "{{ dhcpd_ip_leases[macs_dict[hostname] | lower] }}"
 {% endif %}
 {% endfor %}
