@@ -23,18 +23,18 @@
   loop: "{{ groups[host_provisioner_group] }}"
   loop_control:
     loop_var: host_provisioner_host_item
-
-- include_role:
-    name: "{{ host_provisioner_host_item.1 }}"
-    apply:
-      delegate_to: "{{ host_provisioner_host_item.0 }}"
-      delegate_facts: yes
-  loop: >-
-    {{ groups[host_provisioner_group]
-       | product(host_provisioner_roles)
-       | list }}
-  loop_control:
-    loop_var: host_provisioner_host_item
+#
+# - include_role:
+#     name: "{{ host_provisioner_host_item.1 }}"
+#     apply:
+#       delegate_to: "{{ host_provisioner_host_item.0 }}"
+#       delegate_facts: yes
+#   loop: >-
+#     {{ groups[host_provisioner_group]
+#        | product(host_provisioner_roles)
+#        | list }}
+#   loop_control:
+#     loop_var: host_provisioner_host_item
 
 - include_role:
     name: "{{ host_provisioner_host_item.1 }}"
