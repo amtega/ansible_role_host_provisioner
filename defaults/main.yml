@@ -64,9 +64,9 @@ host_provisioner_force_stalled_removal: no
 # DHCP SETTINGS
 # ==============================================================================
 
-# Server runing a DHCPD server configured with the role `amtega.dhcpd`
-
-host_provisioner_dhcpd_server: "{{ inventory_hostname }}"
+# # Server runing a DHCPD server configured with the role `amtega.dhcpd`
+#
+# host_provisioner_dhcpd_server: "{{ inventory_hostname }}"
 
 # Name of the dhcp net to use during provisioning
 
@@ -76,9 +76,9 @@ host_provisioner_dhcpd_prov_net_name: provisioning
 # COBBLER SETTINGS
 # ==============================================================================
 
-# Server runing a cobbler server configured with the role `amtega.cobbler`
-
-host_provisioner_cobbler_server: "{{ inventory_hostname }}"
+# # Server runing a cobbler server configured with the role `amtega.cobbler`
+#
+# host_provisioner_cobbler_server: "{{ inventory_hostname }}"
 
 # ==============================================================================
 # IPTABLES SETTINGS
@@ -96,9 +96,9 @@ host_provisioner_iptables_ssh_interface: eth0
 # VMWARE BACKEND SETTINGS
 # ==============================================================================
 
-# Server with access to vCenter or ESXi server
-
-host_provisioner_vmware_server: "{{ inventory_hostname }}"
+# # Server with access to vCenter or ESXi server
+#
+# host_provisioner_vmware_server: "{{ inventory_hostname }}"
 
 # VMWare Provisioning network device name
 

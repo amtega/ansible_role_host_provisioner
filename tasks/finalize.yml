@@ -2,4 +2,4 @@
 # Finalize VMware hosts provisioning
 
 - include_tasks: backends/vmware/finalize.yml
-  when: host_provisioner_vmware_server is defined
+  when: hostvars.localhost.host_provisioner_vmware_server is defined

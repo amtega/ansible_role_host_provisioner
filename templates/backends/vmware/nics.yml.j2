@@ -1,4 +1,6 @@
-{%- set vmware_macs = vmware_provisioner_vms_basic_facts
+{%- set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server %}
+
+{%- set vmware_macs =  hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_basic_facts
                       | selectattr("mac_address", "defined")
                       | map(attribute="mac_address")
                       | sum(start=[])
@@ -12,7 +14,7 @@
                                        | map(attribute="instance")
                                        | list -%}
 
-{%- for vm in hostvars[host_provisioner_vmware_server].host_provisioner_vmware_vms_filtered.to_provisione -%}
+{%- for vm in hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione -%}
     {%- set instance_list = vmware_provisioner_instances
                             | selectattr("hw_name", "equalto", vm.name)
                             | list -%}

@@ -1,24 +1,19 @@
 ---
 # Setup cobbler for hosts to provisione
 
-- name: Gather facts from cobbler server
-  setup:
-  delegate_to: "{{ host_provisioner_cobbler_server }}"
-  delegate_facts: yes
-
 - include_tasks: backends/vmware/cobbler.yml
-  when: host_provisioner_vmware_server is defined
+  when: hostvars.localhost.host_provisioner_vmware_server is defined
 
 - name: Setup cobbler for hosts to provisione
   include_role:
     name: amtega.cobbler
+    public: yes
     apply:
       delegate_to: "{{ host_provisioner_cobbler_server }}"
       delegate_facts: yes
   vars:
     cobbler_delete_unmanaged: no
     cobbler_systems: >-
-      {{ hostvars[host_provisioner_vmware_server]
-         .host_provisioner_vmware_cobbler_systems }}
+      {{ hostvars.localhost.host_provisioner_vmware_cobbler_systems }}
 
 - meta: flush_handlers

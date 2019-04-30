@@ -4,9 +4,7 @@
 - name: Finalize VMware hosts config
   include_role:
     name: amtega.vmware_provisioner
-    apply:
-      delegate_to: "{{ host_provisioner_vmware_server }}"
-      delegate_facts: yes
+    public: yes
   vars:
     vmware_provisioner_vms: >-
       {{ lookup("template",
@@ -18,11 +16,6 @@
 - name: Finalize WMware hosts provisioning
   include_role:
     name: amtega.vmware_provisioner
-    apply:
-      delegate_to: "{{ host_provisioner_vmware_server }}"
-      delegate_facts: yes
+    public: yes
   vars:
-      vmware_provisioner_vms: >-
-        {{ lookup("template",
-                  "vms.j2")
-           | from_yaml }}
+    vmware_provisioner_vms: "{{ lookup('template', 'vms.j2') | from_yaml }}"

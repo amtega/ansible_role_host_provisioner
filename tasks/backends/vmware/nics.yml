@@ -5,5 +5,5 @@
   set_fact:
     host_provisioner_vmware_nics: >-
       {{ lookup("template", "backends/vmware/nics.yml.j2") | from_yaml }}
-  delegate_to: "{{ host_provisioner_vmware_server }}"
+  delegate_to: localhost
   delegate_facts: yes

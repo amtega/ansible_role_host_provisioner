@@ -5,12 +5,13 @@
   command: dhcp-lease-list
   register: host_provisioner_dhcpd_lease_result
   changed_when: false
-  loop: "{{ host_provisioner_vmware_macs.keys() | list }}"
+  loop: "{{ hostvars.localhost.host_provisioner_vmware_macs.keys() | list }}"
   until: >-
     host_provisioner_dhcpd_lease_result.stdout_lines
     | select("search",
              "^"
-             + host_provisioner_vmware_macs[host_provisioner_host_item]
+             + hostvars.localhost.host_provisioner_vmware_macs
+               [host_provisioner_host_item]
              + " .*$")
     | list
     | length > 0
@@ -19,8 +20,6 @@
   loop_control:
     loop_var: host_provisioner_host_item
     label: "{{ host_provisioner_host_item }}"
-  delegate_to: "{{ host_provisioner_dhcpd_server }}"
-  delegate_facts: yes
 
 - name: Add provisioned hosts to in-memory inventory
   add_host:

@@ -1,5 +1,0 @@
----
-# Setup facts backends nics
-
-- include_tasks: backends/vmware/nics.yml
-  when: host_provisioner_vmware_server is defined
