@@ -8,7 +8,8 @@
   pause:
     seconds: "{{ host_provisioner_before_ansible_pause }}"
 
-- include_role:
+- name: Apply roles to provisioned hosts
+  include_role:
     name: "{{ host_provisioner_role }}"
     public: yes
   loop: "{{ host_provisioner_roles_mandatory }}"
@@ -33,7 +34,9 @@
       - "-A INPUT -p icmp -j DROP"
     sshd_reload: no
     sshd_restart: no
-    network_interfaces: "{{ hostvars.localhost.host_provisioner_vmware_nics }}"
+    network_interfaces: >-
+      {{ hostvars.localhost.host_provisioner_vmware_nics
+         [inventory_hostname] }}
     reboot_disable: yes
 
 - name: Pause after applying ansible roles
@@ -44,10 +47,9 @@
   command: dhclient -r
   changed_when: yes
 
-- name: Schedule host shutdown
-  command: /bin/true
-  changed_when: yes
-  notify:
-    - halt host
-
-- meta: flush_handlers
+- name: Halt provisioned hosts
+  command: shutdown -h now 'Ansible triggered a halt'
+  async: 1
+  poll: 0
+  changed_when: true
+  ignore_errors: true

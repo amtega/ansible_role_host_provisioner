@@ -27,9 +27,9 @@
 - include_tasks: configure.yml
   when: host_provisioner_stage == "configure"
 
-
-
-# - include_tasks: finalize.yml
+- include_tasks: finalize.yml
+  when: host_provisioner_stage == "finalize"
+  
 #
 # - include_tasks: dhcpd.yml
 #   vars:

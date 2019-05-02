@@ -5,7 +5,6 @@ host_provisioner_roles_mandatory:
   - amtega.iptables
   - amtega.sshd
   - amtega.network_interfaces
-  - amtega.halt
 
 # VMware backends provisioning overrides
 

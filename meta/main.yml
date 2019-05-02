@@ -62,7 +62,3 @@ dependencies:
   - role: amtega.network_interfaces
     tags:
       - never
-
-  - role: amtega.halt
-    tags:
-      - never
