@@ -48,7 +48,11 @@
   changed_when: yes
 
 - name: Halt provisioned hosts
-  command: shutdown -h now 'Ansible triggered a halt'
+  shell: >-
+    sleep 3
+    && shutdown -h now 'Ansible triggered a halt'
+  args:
+    warn: no
   async: 1
   poll: 0
   changed_when: true

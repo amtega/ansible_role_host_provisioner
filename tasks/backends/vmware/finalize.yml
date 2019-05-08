@@ -18,4 +18,5 @@
     name: amtega.vmware_provisioner
     public: yes
   vars:
-    vmware_provisioner_vms: "{{ lookup('template', 'vms.j2') | from_yaml }}"
+    vmware_provisioner_vms: >-
+      {{ lookup('template', 'backends/vmware/vms.j2') | from_yaml }}
