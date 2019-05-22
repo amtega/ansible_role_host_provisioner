@@ -39,11 +39,11 @@ dependencies:
       vmware_provisioner_manage_inventory_vms: no
     when: host_provisioner_vmware_server is defined
 
-  - role: amtega.users
+  - role: amtega.groups
     tags:
       - never
 
-  - role: amtega.groups
+  - role: amtega.users
     tags:
       - never
 

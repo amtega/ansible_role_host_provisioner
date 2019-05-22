@@ -34,6 +34,8 @@
       - "-A INPUT -p icmp -j DROP"
     sshd_reload: no
     sshd_restart: no
+    sshd_interface: >-
+      {{ hostvars.localhost.host_provisioner_iptables_ssh_interface }}
     network_interfaces: >-
       {{ hostvars.localhost.host_provisioner_vmware_nics
          [inventory_hostname] }}

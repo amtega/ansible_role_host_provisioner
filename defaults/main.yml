@@ -111,7 +111,7 @@ host_provisioner_vmware_prov_net_type: vmxnet3
 # Give this time (seconds) to a new provisioned virtual machine to get a dhcp
 # address
 
-host_provisioner_vmware_dhcp_pause: 10
+host_provisioner_vmware_dhcp_pause: 30
 
 # Dictionary to map VMware guest id types to cobbler profiles. The format of the
 # dictionary is this:
