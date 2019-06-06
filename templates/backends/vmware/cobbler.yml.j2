@@ -5,7 +5,6 @@
 {% set ns.found = true %}
 - name: "{{ result.instance.hw_eth0.macaddress }}"
   profile: "{{ host_provisioner_vmware_guest_id_to_cobbler_profile_map[result.vm.guest_id] }}"
-  state: present
 {% endif %}
 {% endfor %}
 

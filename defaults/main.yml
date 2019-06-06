@@ -5,6 +5,57 @@
 # GENERAL SETTINGS
 # ==============================================================================
 
+# Provisioning stage that the role is managing. Each stage must be run aginst an
+# specific host type and in the specific order that is detailed below:
+#
+# Host connected to backends:
+#
+#   - cleanup_stalled: cleanup all hosts considered stalled.
+#   - provisione: create the necessary hosts items in the backend (e.g. a
+#     virtual machine)
+#
+# Host running dhcp:
+#
+#   - setup_dhcp: creates the necessary dhcp entries for the hosts to
+#     provisione
+#
+# Host running cobbler:
+#
+#   - setup_cobbler: creates the necessary cobbler entries for the hosts to
+#     provisione
+#
+# Host connected to backends:
+#
+#   - install: launch install of the hosts to provisione
+#
+# Host running dhcp:
+#
+#   - inventory: setups entries in the ansible in-memory inventory for the
+#     hosts to provisiones
+#
+# Host connected to backends:
+#
+#   - wait: wait for new provisioned hosts to be installed
+#
+# Provisioned hosts (group defined in the variable `host_provisioner_group`):
+#
+#   - configure: run mandatory roles on the new provisioned hosts
+#
+# Host connected to backends:
+#
+#   - finalize: finalize provisioning of the new hosts (e.g. setup final
+#     network devices)
+#
+# Host running dhcp:
+#
+#   - cleanup_dhcp: cleanup dhcp entries used to provisione hosts
+#
+# Host running cobbler:
+#
+#   - cleanup_cobbler: cleanup cobbler entries used to provisione hosts
+
+host_provisioner_stage:
+
 # Credentials to use for provisioning
 
 host_provisioner_ansible_user: root

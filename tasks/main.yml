@@ -14,6 +14,8 @@
 
 - include_tasks: cobbler.yml
   when: host_provisioner_stage == "setup_cobbler"
+  vars:
+    host_provisioner_cobbler_systems_state: present
 
 - include_tasks: install.yml
   when: host_provisioner_stage == "install"
@@ -29,8 +31,13 @@
 
 - include_tasks: finalize.yml
   when: host_provisioner_stage == "finalize"
-  
-#
-# - include_tasks: dhcpd.yml
-#   vars:
-    # host_provisioner_dhcpd_hosts_state: absent
+
+- include_tasks: dhcpd.yml
+  vars:
+    host_provisioner_dhcpd_hosts_state: absent
+  when: host_provisioner_stage == "cleanup_dhcp"
+
+- include_tasks: cobbler.yml
+  vars:
+    host_provisioner_cobbler_systems_state: absent
+  when: host_provisioner_stage == "cleanup_cobbler"

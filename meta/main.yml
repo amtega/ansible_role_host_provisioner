@@ -25,10 +25,11 @@ galaxy_info:
 
 dependencies:
   - role: amtega.check_platform
-    check_platform_distributions:
-      centos: 7
-      fedora: 27
-      rhel: 7
+    vars:
+      check_platform_distributions:
+        centos: 7
+        fedora: 27
+        rhel: 7
     tags:
       - role::host_provisioner
 
@@ -48,10 +49,6 @@ dependencies:
       - never
 
   - role: amtega.iptables
-    tags:
-      - never
-
-  - role: amtega.selinux
     tags:
       - never
 
