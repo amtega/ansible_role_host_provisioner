@@ -1,2 +1,60 @@
 ---
 # Role tasks
+
+- include_role:
+    name: amtega.check_platform
+  when: host_provisioner_stage != "configure"
+  vars:
+    check_platform_distributions:
+      centos: 7
+      fedora: 27
+      rhel: 7
+
+- include_role:
+    name: amtega.vmware_provisioner
+  vars:
+    vmware_provisioner_gather_detailed_vm_facts: yes
+    vmware_provisioner_gather_inventory_vm_configs: yes
+    vmware_provisioner_manage_inventory_vms: no
+  when: host_provisioner_stage in ["cleanup_stalled", "provisione"]
+
+- include_tasks: stalled.yml
+  when: host_provisioner_stage == "cleanup_stalled"
+
+- include_tasks: create.yml
+  when: host_provisioner_stage == "provisione"
+
+- include_tasks: dhcpd.yml
+  when: host_provisioner_stage == "setup_dhcp"
+  vars:
+    host_provisioner_dhcpd_hosts_state: present
+
+- include_tasks: cobbler.yml
+  when: host_provisioner_stage == "setup_cobbler"
+  vars:
+    host_provisioner_cobbler_systems_state: present
+
+- include_tasks: install.yml
+  when: host_provisioner_stage == "install"
+
+- include_tasks: inventory.yml
+  when: host_provisioner_stage == "inventory"
+
+- include_tasks: wait.yml
+  when: host_provisioner_stage == "wait"
+
+- include_tasks: configure.yml
+  when: host_provisioner_stage == "configure"
+
+- include_tasks: finalize.yml
+  when: host_provisioner_stage == "finalize"
+
+- include_tasks: dhcpd.yml
+  vars:
+    host_provisioner_dhcpd_hosts_state: absent
+  when: host_provisioner_stage == "cleanup_dhcp"
+
+- include_tasks: cobbler.yml
+  vars:
+    host_provisioner_cobbler_systems_state: absent
+  when: host_provisioner_stage == "cleanup_cobbler"

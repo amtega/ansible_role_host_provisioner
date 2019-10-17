@@ -1,0 +1,23 @@
+{% set dhcpd_output = host_provisioner_dhcpd_lease_result.results
+                      | map(attribute="stdout_lines")
+                      | sum(start=[])
+                      | select("search",
+                               "..:..:..:..:..:.. +[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ ")
+                      | map("regex_replace",
+                            "(..:..:..:..:..:..) +([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+) .*",
+                            "'\\1': '\\2'")
+                      | map("lower")
+                      | list %}
+
+{% if dhcpd_output | length > 0 %}
+{% set dhcpd_ip_leases = ("{\n" + dhcpd_output | join(",\n") + "\n}") | from_yaml %}
+{% else %}
+{% set dhcpd_ip_leases = [] %}
+{% endif %}
+
+{% set macs_dict =  hostvars.localhost.host_provisioner_vmware_macs %}
+{% for hostname in macs_dict.keys() | list %}
+{% if dhcpd_ip_leases[macs_dict[hostname] | lower] is defined %}
+"{{ hostname }}": "{{ dhcpd_ip_leases[macs_dict[hostname] | lower] }}"
+{% endif %}
+{% endfor %}

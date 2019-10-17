@@ -1,0 +1,64 @@
+{%- set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server %}
+
+{%- set vmware_macs =  hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_basic_facts
+                      | selectattr("mac_address", "defined")
+                      | map(attribute="mac_address")
+                      | sum(start=[])
+                      | map("lower")
+                      | list -%}
+
+{%- set ns = namespace(found=false, generated_macs=[], mac={}, mac_found=false) -%}
+
+{%- set vmware_provisioner_instances = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_setup_result.results
+                                       | selectattr("instance", "defined")
+                                       | map(attribute="instance")
+                                       | list -%}
+
+{%- for vm in hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione -%}
+    {%- set instance_list = vmware_provisioner_instances
+                            | selectattr("hw_name", "equalto", vm.name)
+                            | list -%}
+
+    {%- if instance_list | length == 1 -%}
+        {%- set instance = instance_list | first -%}
+        {%- set ns.found=true -%}
+
+{{- instance.hw_name }}:{{ "\n" }}
+
+        {%- for interface in hostvars[vm.name].network_interfaces -%}
+            {%- if interface.macaddress | default("") | length == 0 -%}
+                {%- if loop.index <= instance.hw_interfaces | length -%}
+                    {%- set instance_interface_name = instance.hw_interfaces[loop.index0] -%}
+                    {%- set ns.mac = { "macaddress": instance["hw_" + instance_interface_name].macaddress | lower } -%}
+                {%- else -%}
+                    {%- set mac_prefix = (instance.values()
+                                          | list
+                                          | selectattr("macaddress", "defined")
+                                          | list
+                                          | first).macaddress
+                                          | regex_replace("(..):(..):(..):(..):(..):(..)", "\\1:\\2:\\3:\\4") -%}
+
+                    {%- for i in range(host_provisioner_vmware_mac_generation_retries) -%}
+                        {%- if not ns.mac_found -%}
+                            {%- set ns.mac = { "macaddress": mac_prefix | random_mac | lower } -%}
+                            {%- if ns.mac not in ns.generated_macs and ns.mac not in vmware_macs -%}
+                                {%- set ns.generated_macs = ns.generated_macs + [ ns.mac ] -%}
+                                {%- set ns.mac_found = true -%}
+                            {%- endif -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                    {%- set ns.mac_found = false -%}
+                {%- endif -%}
+            {%- else -%}
+                {%- set ns.mac = { "macaddress": interface.macaddress | lower } -%}
+            {%- endif -%}
+  - {{ interface | combine(ns.mac) | to_json }}{{ "\n" }}
+        {%- endfor -%}
+
+    {%- endif -%}
+
+{%- endfor -%}
+
+{%- if not ns.found -%}
+[]
+{%- endif -%}

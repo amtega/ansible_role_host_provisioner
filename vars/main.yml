@@ -1,2 +1,25 @@
 ---
 # Role variables
+
+host_provisioner_roles_mandatory:
+  - amtega.bootstrap
+  - amtega.groups
+  - amtega.users
+  - amtega.iptables
+  - amtega.sshd
+  - amtega.network_interfaces
+
+# VMware backends provisioning overrides
+
+host_provisioner_vmware_vm_annotation:
+  ansible_state: provisioning
+  creation_date: >-
+    {{ "%Y-%m-%d %H:%M:%S"
+        | strftime(ansible_facts.date_time.epoch) }}
+
+host_provisioner_vmware_vm_overrides:
+  networks:
+    - name: "{{ host_provisioner_vmware_prov_net_name }}"
+      device_type: "{{ host_provisioner_vmware_prov_net_type }}"
+  annotation: '{{ host_provisioner_vmware_vm_annotation | to_yaml }}'
+  state: present

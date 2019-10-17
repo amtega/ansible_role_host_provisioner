@@ -1,0 +1,16 @@
+{% set ns = namespace(found=false) %}
+{% set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server %}
+
+{% for instance in hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_setup_result.results
+       | selectattr("instance", "defined")
+       | map(attribute="instance")
+       | list %}
+{% set ns.found = true %}
+- hostname: {{ instance.hw_name }}
+  mac: {{ instance.hw_eth0.macaddress }}
+  subnet: "{{ host_provisioner_dhcpd_prov_net_name }}"
+{% endfor %}
+
+{% if not ns.found %}
+[]
+{% endif %}

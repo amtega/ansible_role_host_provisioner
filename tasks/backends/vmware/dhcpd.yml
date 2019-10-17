@@ -1,0 +1,12 @@
+---
+# Setup facts to manage VMware provisioned hosts dhcpd entries
+
+- name: Setup facts to manage VMware provisioned hosts dhcpd entries
+  set_fact:
+    host_provisioner_dhcpd_server: "{{ inventory_hostname }}"
+    host_provisioner_vmware_dhcpd_hosts: >-
+      {{ lookup('template', 'backends/vmware/dhcpd.yml.j2') | from_yaml }}
+  delegate_to: localhost
+  delegate_facts: yes
+  vars:
+    host_provisioner_vmware_dhcpd_hosts_state: present

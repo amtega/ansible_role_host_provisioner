@@ -1,0 +1,21 @@
+---
+# Finalize VMware hosts provisioning
+
+- name: Finalize VMware hosts config
+  include_role:
+    name: amtega.vmware_provisioner
+    public: yes
+  vars:
+    vmware_provisioner_vms: >-
+      {{ lookup("template", "backends/vmware/vms.yml.j2")
+         | from_yaml
+         | map("combine", { "state": "present" })
+         | list }}
+
+- name: Finalize WMware hosts provisioning
+  include_role:
+    name: amtega.vmware_provisioner
+    public: yes
+  vars:
+    vmware_provisioner_vms: >-
+      {{ lookup('template', 'backends/vmware/vms.yml.j2') | from_yaml }}

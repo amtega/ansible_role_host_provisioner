@@ -1,0 +1,76 @@
+---
+# This an expample playbook to use the amtega.host_provisioner role
+
+- name: Cleanup stalled hosts and provisione the new ones
+  hosts: backends_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: cleanup_stalled
+
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: provisione
+
+- name: Setup dhcp entries for provisioned hosts
+  hosts: dhcpd_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: setup_dhcp
+
+- name: Setup cobbler entities for provisioned hosts
+  hosts: cobbler_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: setup_cobbler
+
+- name: Install new provisioned hosts
+  hosts: backends_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: install
+
+- name: Inventory new provisioned hosts
+  hosts: dhcpd_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: inventory
+
+- name: Wait for new provisioned hosts to be installed
+  hosts: backends_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: wait
+
+- name: Configure new provisioned hosts
+  hosts: "{{ hostvars[backends_host].host_provisioner_group }}"
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: configure
+
+- name: Finalize provisioned hosts
+  hosts: backends_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: finalize
+
+- name: Cleanup dhcp entries used to provisione hosts
+  hosts: dhcpd_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: cleanup_dhcp
+
+- name: Cleanup cobbler entries used to provisione hosts
+  hosts: cobbler_host
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: cleanup_cobbler

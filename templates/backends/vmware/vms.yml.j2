@@ -1,0 +1,22 @@
+{%- set ns = namespace(vms=[]) -%}
+
+{%- for vm in hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione -%}
+    {%- set ns_vm = namespace(vmware_vm_networks=[]) -%}
+    {%- set network_interfaces = hostvars.localhost.host_provisioner_vmware_nics[vm.name] -%}
+
+    {%- for vmware_network in vm.networks | default([]) -%}
+        {%- set mac = { "mac": network_interfaces[loop.index0].macaddress } -%}
+        {%- set vmware_network_with_mac = vmware_network | combine(mac) -%}
+        {%- set ns_vm.vmware_vm_networks = ns_vm.vmware_vm_networks
+                                           + [ vmware_network_with_mac ] -%}
+    {%- endfor -%}
+
+    {%- set ns.vms = ns.vms
+                     + [ (vm | combine({ "networks": ns_vm.vmware_vm_networks })) ] -%}
+{%- endfor -%}
+
+{%- if ns.vms | length > 0 -%}
+  {{- ns.vms | to_json -}}
+{%- else -%}
+  []
+{%- endif -%}

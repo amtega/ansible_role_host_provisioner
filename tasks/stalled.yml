@@ -1,0 +1,4 @@
+---
+# Manage stalled hosts
+
+- include_tasks: backends/vmware/stalled.yml

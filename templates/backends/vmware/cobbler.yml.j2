@@ -1,0 +1,14 @@
+{% set ns = namespace(found=false) %}
+{% set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server %}
+
+{% for result in hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_setup_result.results %}
+{% if result.instance is defined %}
+{% set ns.found = true %}
+- name: "{{ result.instance.hw_eth0.macaddress }}"
+  profile: "{{ host_provisioner_vmware_guest_id_to_cobbler_profile_map[result.vm.guest_id] }}"
+{% endif %}
+{% endfor %}
+
+{% if not ns.found %}
+[]
+{% endif %}

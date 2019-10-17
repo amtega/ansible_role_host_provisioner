@@ -1,0 +1,19 @@
+---
+# Power on VMware hosts to provisione
+
+- name: Power on provisioned hosts vmware virtual machines
+  include_role:
+    name: amtega.vmware_provisioner
+    public: yes
+  vars:
+    vmware_provisioner_vms: >
+      {{ hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione
+         | map("combine", host_provisioner_vmware_vm_overrides)
+         | map("combine", { "state": "poweredon" })
+         | list }}
+
+- name: Pause to give time to the new VMware hosts dhcp client
+  pause:
+    seconds: "{{ host_provisioner_vmware_dhcp_pause }}"
+  delegate_to: "{{ hostvars.localhost.host_provisioner_vmware_server }}"
+  delegate_facts: yes

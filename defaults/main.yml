@@ -1,2 +1,167 @@
 ---
 # Role default lower priority variables
+
+# ==============================================================================
+# GENERAL SETTINGS
+# ==============================================================================
+
+# Provisioning stage that the role is managing. Each stage must be run against
+# an specific host type and in the specific order that is detailed below:
+#
+# Host connected to backends:
+#
+#   - cleanup_stalled: cleanup all hosts considered stalled.
+#   - provisione: create the necessary hosts items in the backend (e.g. a
+#     virtual machine)
+#
+# Host running dhcp:
+#
+#   - setup_dhcp: creates the necessary dhcp entries for the hosts to
+#     provisione
+#
+# Host running cobbler:
+#
+#   - setup_cobbler: creates the necessary cobbler entries for the hosts to
+#     provisione
+#
+# Host connected to backends:
+#
+#   - install: launch install of the hosts to provisione
+#
+# Host running dhcp:
+#
+#   - inventory: setups entries in the ansible in-memory inventory for the
+#     hosts to provisiones
+#
+# Host connected to backends:
+#
+#   - wait: wait for new provisioned hosts to be installed
+#
+# Provisioned hosts (group defined in the variable `host_provisioner_group`):
+#
+#   - configure: run mandatory roles on the new provisioned hosts
+#
+# Host connected to backends:
+#
+#   - finalize: finalize provisioning of the new hosts (e.g. setup final
+#     network devices)
+#
+# Host running dhcp:
+#
+#   - cleanup_dhcp: cleanup dhcp entries used to provisione hosts
+#
+# Host running cobbler:
+#
+#   - cleanup_cobbler: cleanup cobbler entries used to provisione hosts
+
+host_provisioner_stage:
+
+# Credentials to use for provisioning
+
+host_provisioner_ansible_user: root
+host_provisioner_ansible_password: password
+host_provisioner_ansible_become: no
+host_provisioner_ansible_become_method: su
+host_provisioner_ansible_become_user: root
+host_provisioner_ansible_become_pass: password
+
+# SSH common args to use when provisioning
+
+host_provisioner_ssh_common_args: >-
+  -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+
+# Ansible group to put in the provisioned hosts
+
+host_provisioner_group: provisioned
+
+# Waiting parameters for connection once the host is created. Should be enough
+# to give time to the hosts to be installed using cobbler
+
+host_provisioner_wait_for_connection_sleep: 5
+host_provisioner_wait_for_connection_delay: 5
+host_provisioner_wait_for_connection_timeout: 900
+
+# Give this time (seconds) to a new provisioned virtual machine before trying to
+# apply ansible roles
+
+host_provisioner_before_ansible_pause: 10
+
+# Give this time (seconds) to a new provisioned virtual machine after applying
+# ansible roles
+
+host_provisioner_after_ansible_pause: 10
+
+
+# Maximum number seconds that a host can be in provisioning state before it may
+# be considered stalled
+
+host_provisioner_stalled_timeout: 600
+
+# Force removal of hosts in provisioning state without waiting for the timeout
+# indicated in `host_provisioner_stalled_timeout`
+
+host_provisioner_force_stalled_removal: no
+
+# ==============================================================================
+# DHCP SETTINGS
+# ==============================================================================
+
+# Name of the dhcp net to use during provisioning
+
+host_provisioner_dhcpd_prov_net_name: provisioning
+
+# ==============================================================================
+# IPTABLES SETTINGS
+# ==============================================================================
+
+# This roles uses amtega.iptables role to manage network security during
+# provisioning. The following variables configures some aspects of this role
+
+# Iptables zone where to put ssh service
+
+host_provisioner_iptables_ssh_zone: MANAGEMENT
+
+# Interface with ssh when the host is being provisioned
+
+host_provisioner_iptables_ssh_interface: eth0
+
+# ==============================================================================
+# VMWARE BACKEND SETTINGS
+# ==============================================================================
+
+# VMWare Provisioning network device name
+
+host_provisioner_vmware_prov_net_name: provisioning
+
+# VMWare Provisioning network device type
+
+host_provisioner_vmware_prov_net_type: vmxnet3
+
+# Give this time (seconds) to a new provisioned virtual machine to get a dhcp
+# address
+
+host_provisioner_vmware_dhcp_pause: 30
+
+# Dictionary to map VMware guest id types to cobbler profiles. The format of the
+# dictionary is this:
+#
+# {
+#  <guest_id_type_1>: <cobbler_profile_1>
+#  <guest_id_type_2>: <cobbler_profile_2>
+#  <guest_id_type_N>: <cobbler_profile_N>
+# }
+#
+# Sample:
+#
+# {
+#  centos6_64Guest: CentOS-6
+#  centos7_64Guest: CentOS-7
+#  rhel6_64Guest: RHEL-6
+#  rhel7_64Guest: RHEL-7
+# }
+
+host_provisioner_vmware_guest_id_to_cobbler_profile_map: {}
+
+# Number of retries to generate a unique MVware mac address
+
+host_provisioner_vmware_mac_generation_retries: 3

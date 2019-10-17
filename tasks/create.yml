@@ -1,0 +1,4 @@
+---
+# Create hosts
+
+- include_tasks: backends/vmware/create.yml

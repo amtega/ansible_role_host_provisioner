@@ -1,0 +1,18 @@
+---
+# Wait for provisioned hosts to be installed
+
+- name: Wait for hosts connection
+  wait_for:
+    host: "{{ host_provisioner_host_dhcpd_ip }}"
+    port: "{{ host_provisioner_host_vars.ansible_port | default(22) }}"
+    sleep: "{{ host_provisioner_wait_for_connection_sleep }}"
+    delay: "{{ host_provisioner_wait_for_connection_delay }}"
+    timeout: "{{ host_provisioner_wait_for_connection_timeout }}"
+  loop: "{{ groups[host_provisioner_group] }}"
+  loop_control:
+    loop_var: host_provisioner_host_item
+  vars:
+    host_provisioner_host_dhcpd_ip: >-
+      {{ host_provisioner_dhcpd_ips[host_provisioner_host_item] }}
+    host_provisioner_host_vars: >-
+      {{ hostvars[host_provisioner_host_item] }}
