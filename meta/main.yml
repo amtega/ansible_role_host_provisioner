@@ -7,15 +7,15 @@ galaxy_info:
   description: Provisione hosts orchestrating several roles and backends.
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
-  min_ansible_version: 2.7
+  min_ansible_version: 2.8
   platforms:
     - name: EL
       versions:
         - 7
     - name: Fedora
       versions:
-        - 27
-        - 28
+        - 29
+        - 30
   galaxy_tags:
     - system
     - dhcp
@@ -25,20 +25,16 @@ galaxy_info:
 
 dependencies:
   - role: amtega.check_platform
-    vars:
-      check_platform_distributions:
-        centos: 7
-        fedora: 27
-        rhel: 7
     tags:
-      - role::host_provisioner
+      - never
 
   - role: amtega.vmware_provisioner
-    vars:
-      vmware_provisioner_gather_detailed_vm_facts: yes
-      vmware_provisioner_gather_inventory_vm_configs: yes
-      vmware_provisioner_manage_inventory_vms: no
-    when: host_provisioner_vmware_server is defined
+    tags:
+      - never
+
+  - role: amtega.bootstrap
+    tags:
+      - never
 
   - role: amtega.groups
     tags:

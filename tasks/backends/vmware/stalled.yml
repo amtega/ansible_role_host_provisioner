@@ -1,9 +1,14 @@
 ---
 # Remove stalled vmware hosts and setup related facts
 
-- name: Setup facts to manage filtered VMware hosts
+- name: Setup facts with VMware server
   set_fact:
     host_provisioner_vmware_server: "{{ inventory_hostname }}"
+  delegate_to: localhost
+  delegate_facts: yes
+
+- name: Setup facts to manage filtered VMware hosts
+  set_fact:
     host_provisioner_vmware_vms_filtered: >-
       {{ lookup('template', 'backends/vmware/filter.yml.j2') | from_yaml }}
   delegate_to: localhost

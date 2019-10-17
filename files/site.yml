@@ -48,7 +48,7 @@
         host_provisioner_stage: wait
 
 - name: Configure new provisioned hosts
-  hosts: "{{ host_provisioner_group }}"
+  hosts: "{{ hostvars[backends_host].host_provisioner_group }}"
   roles:
     - role: amtega.host_provisioner
       vars:

@@ -1,4 +1,5 @@
 {%- set ns = namespace(to_provisione=[], stalled=[]) -%}
+{%- set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server -%}
 
 {%- for vm in  hostvars[host_provisioner_vmware_server].vmware_provisioner_inventory_vms -%}
     {%- if vm.uuid is defined -%}

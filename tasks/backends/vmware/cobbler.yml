@@ -1,7 +1,7 @@
 ---
-# Setup facts to manage VMware provisioend hosts with cobbler
+# Setup facts to manage VMware provisioned hosts with cobbler
 
-- name: Setup facts to manage VMware provisioend hosts with cobbler
+- name: Setup facts to manage VMware provisioned hosts with cobbler
   set_fact:
     host_provisioner_cobbler_server: "{{ inventory_hostname }}"
     host_provisioner_vmware_cobbler_systems: >-

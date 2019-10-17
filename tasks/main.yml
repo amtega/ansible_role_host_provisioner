@@ -1,6 +1,23 @@
 ---
 # Role tasks
 
+- include_role:
+    name: amtega.check_platform
+  when: host_provisioner_stage != "configure"
+  vars:
+    check_platform_distributions:
+      centos: 7
+      fedora: 27
+      rhel: 7
+
+- include_role:
+    name: amtega.vmware_provisioner
+  vars:
+    vmware_provisioner_gather_detailed_vm_facts: yes
+    vmware_provisioner_gather_inventory_vm_configs: yes
+    vmware_provisioner_manage_inventory_vms: no
+  when: host_provisioner_stage in ["cleanup_stalled", "provisione"]
+
 - include_tasks: stalled.yml
   when: host_provisioner_stage == "cleanup_stalled"
 

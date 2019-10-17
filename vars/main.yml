@@ -2,6 +2,7 @@
 # Role variables
 
 host_provisioner_roles_mandatory:
+  - amtega.bootstrap
   - amtega.groups
   - amtega.users
   - amtega.iptables

@@ -5,8 +5,8 @@
 # GENERAL SETTINGS
 # ==============================================================================
 
-# Provisioning stage that the role is managing. Each stage must be run aginst an
-# specific host type and in the specific order that is detailed below:
+# Provisioning stage that the role is managing. Each stage must be run against
+# an specific host type and in the specific order that is detailed below:
 #
 # Host connected to backends:
 #
@@ -59,7 +59,7 @@ host_provisioner_stage:
 # Credentials to use for provisioning
 
 host_provisioner_ansible_user: root
-host_provisioner_ansible_ssh_pass: password
+host_provisioner_ansible_password: password
 host_provisioner_ansible_become: no
 host_provisioner_ansible_become_method: su
 host_provisioner_ansible_become_user: root
@@ -72,7 +72,7 @@ host_provisioner_ssh_common_args: >-
 
 # Ansible group to put in the provisioned hosts
 
-host_provisioner_group: host_provisioner_hosts
+host_provisioner_group: provisioned
 
 # Waiting parameters for connection once the host is created. Should be enough
 # to give time to the hosts to be installed using cobbler
@@ -80,15 +80,6 @@ host_provisioner_group: host_provisioner_hosts
 host_provisioner_wait_for_connection_sleep: 5
 host_provisioner_wait_for_connection_delay: 5
 host_provisioner_wait_for_connection_timeout: 900
-
-# List of strings with the role names to apply after provisioning. Keep in mind
-# that this roles will be applied before the mandatory ones detailed in the
-# variable `host_provisioner_roles_mandatory` in `vars/main.yml`
-
-host_provisioner_roles:
-  - amtega.groups
-  - amtega.users
-  - amtega.selinux
 
 # Give this time (seconds) to a new provisioned virtual machine before trying to
 # apply ansible roles
@@ -115,41 +106,28 @@ host_provisioner_force_stalled_removal: no
 # DHCP SETTINGS
 # ==============================================================================
 
-# # Server runing a DHCPD server configured with the role `amtega.dhcpd`
-#
-# host_provisioner_dhcpd_server: "{{ inventory_hostname }}"
-
 # Name of the dhcp net to use during provisioning
 
 host_provisioner_dhcpd_prov_net_name: provisioning
 
 # ==============================================================================
-# COBBLER SETTINGS
-# ==============================================================================
-
-# # Server runing a cobbler server configured with the role `amtega.cobbler`
-#
-# host_provisioner_cobbler_server: "{{ inventory_hostname }}"
-
-# ==============================================================================
 # IPTABLES SETTINGS
 # ==============================================================================
+
+# This roles uses amtega.iptables role to manage network security during
+# provisioning. The following variables configures some aspects of this role
 
 # Iptables zone where to put ssh service
 
 host_provisioner_iptables_ssh_zone: MANAGEMENT
 
-# Interface that will have ssh running when the host finish provisioning
+# Interface with ssh when the host is being provisioned
 
 host_provisioner_iptables_ssh_interface: eth0
 
 # ==============================================================================
 # VMWARE BACKEND SETTINGS
 # ==============================================================================
-
-# # Server with access to vCenter or ESXi server
-#
-# host_provisioner_vmware_server: "{{ inventory_hostname }}"
 
 # VMWare Provisioning network device name
 

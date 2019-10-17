@@ -31,7 +31,7 @@
     name: "{{ host_provisioner_host_ip_item.key }}"
     ansible_host: "{{ host_provisioner_host_ip_item.value }}"
     ansible_user: "{{ host_provisioner_ansible_user }}"
-    ansible_ssh_pass: "{{ host_provisioner_ansible_ssh_pass }}"
+    ansible_password: "{{ host_provisioner_ansible_password }}"
     ansible_ssh_common_args: "{{ host_provisioner_ssh_common_args }}"
     ansible_become: "{{ host_provisioner_ansible_become }}"
     ansible_become_method: "{{ host_provisioner_ansible_become_method }}"
