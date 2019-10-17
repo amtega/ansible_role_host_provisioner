@@ -18,14 +18,14 @@
   vars:
     iptables_load_from_hostvars: no
     iptables_zones:
-      - name: "{{ host_provisioner_iptables_ssh_zone }}"
+      - name: "{{ iptables_ssh_zone }}"
         interfaces:
           - "{{ ansible_facts.default_ipv4.interface }}"
-          - "{{ hostvars.localhost.host_provisioner_iptables_ssh_interface }}"
+          - "{{ iptables_ssh_interface }}"
     iptables_services:
       - name: ssh
         ports: "{{ sshd_port | default(22) }}"
-        zones: "{{ hostvars.localhost.host_provisioner_iptables_ssh_zone }}"
+        zones: "{{ iptables_ssh_zone }}"
     iptables_input_raw_rules:
       - "-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT"
       - "-A INPUT -p icmp -m state --state RELATED -j ACCEPT"
