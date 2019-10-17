@@ -37,6 +37,8 @@
     ansible_become_method: "{{ host_provisioner_ansible_become_method }}"
     ansible_become_user: "{{ host_provisioner_ansible_become_user }}"
     ansible_become_pass: "{{ host_provisioner_ansible_become_pass }}"
+    iptables_ssh_zone: "{{ host_provisioner_iptables_ssh_zone }}"
+    iptables_ssh_interface: "{{ host_provisioner_iptables_ssh_interface }}"
     groups: "{{ [ host_provisioner_group ] }}"
   changed_when: no
   loop: "{{ host_provisioner_dhcpd_ips | from_yaml | dict2items }}"
