@@ -5,6 +5,7 @@ host_provisioner_roles_mandatory:
   - amtega.bootstrap
   - amtega.groups
   - amtega.users
+  - amtega.sudo
   - amtega.iptables
   - amtega.sshd
   - amtega.network_interfaces

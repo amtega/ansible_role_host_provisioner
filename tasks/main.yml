@@ -3,7 +3,9 @@
 
 - include_role:
     name: amtega.check_platform
-  when: host_provisioner_stage != "configure"
+  when:
+    - host_provisioner_stage != "configure_start"
+    - host_provisioner_stage != "configure_end"
   vars:
     check_platform_distributions:
       centos: 7
@@ -43,8 +45,11 @@
 - include_tasks: wait.yml
   when: host_provisioner_stage == "wait"
 
-- include_tasks: configure.yml
-  when: host_provisioner_stage == "configure"
+- include_tasks: configure_start.yml
+  when: host_provisioner_stage == "configure_start"
+
+- include_tasks: configure_end.yml
+  when: host_provisioner_stage == "configure_end"
 
 - include_tasks: finalize.yml
   when: host_provisioner_stage == "finalize"
