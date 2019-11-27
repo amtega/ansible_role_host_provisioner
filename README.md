@@ -45,15 +45,38 @@ To use the role you must setup a playbook that calls the role multiple times aga
 
 ## Testing
 
-<!-- A description of how to run tests of the role if available. For example: -->
+Due to the complexity of the role and the set of involved services, currently it's only posible to run tests aginst a real configured platform as described above. You can use a single host with all services and pass the variable `single_host` to the tests or, alternatively, use different servers for each service passing the following variables:
 
-Tests are based on docker containers. You can setup docker engine quickly using the playbook `files/setup.yml` available in the role [amtega.docker_engine](https://galaxy.ansible.com/amtega/docker_engine).
+- `backends_host`: server with access to the backends platforms supported (see above for details)
+- `dhcpd_host`: server with dhcpd service (see above for details)
+- `cobbler_host`: server with cobbler service (see above for details)
 
-Once you have docker, you can run the tests with the following commands:
+Also, you need to pass the following variables with the testing virtual machine config:
+
+- `host_provisioner_testing_vm_name`: hostname (default is `host-provisioner-testing-vm`
+- `host_provisioner_testing_vm_folder`: vmware folder (default is "/")
+- `host_provisioner_testing_vm_annotation`: vm annotation (default is "Ansible host_provisioner role testing machine")
+- `host_provisioner_testing_vm_datacenter`: vmware datacenter
+- `host_provisioner_testing_vm_cluster`: vmware cluster
+- `host_provisioner_testing_vm_guest_id`: vmware guest id
+- `host_provisioner_testing_vm_disk_size`: vm disk size (default is 30)
+- `host_provisioner_testing_vm_disk_type`: vm disk type (default is thin)
+- `host_provisioner_testing_vm_datastore`: vmware datastore
+- `host_provisioner_testing_vm_memory_mb`: vm memory (default is 2048)
+- `host_provisioner_testing_vm_num_cpus`: vm cpus number (default is 1)
+- `host_provisioner_testing_vm_num_cpu_cores_per_socket`: vm number cores per socket (default is 1)
+- `host_provisioner_testing_vm_net_name`: vm network device name
+- `host_provisioner_testing_vm_net_type`: vm network device type (default is "vmxnet3")
+- `host_provisioner_testing_vm_net_gateway`: vm network device gateway
+- `host_provisioner_testing_vm_net_logicalname`: vm network device logical name (default is "eth0")
+- `host_provisioner_testing_vm_net_address`: vm network device ip address
+- `host_provisioner_testing_vm_net_cidr`: vm network device netmask in cidr format
+
+For example, you can run the tests with the following commands:
 
 ```shell
-$ cd thisrole/tests
-$ ansible-playbook main.yml
+$ cd host_provisioner/tests
+$ ansible-playbook main.yml -e single_host=my_single_host
 ```
 
 ## License

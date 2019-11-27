@@ -13,22 +13,24 @@
                            | selectattr("hw_name", "defined")
                            | selectattr("hw_folder", "defined")
                            | selectattr("hw_name", "equalto", vm.name)
-                           | selectattr("hw_folder",
-                                        "search",
-                                        "^.*/vm"
-                                        + vm.folder
-                                          | regex_replace("^.*/vm/(.*)", "\\1")
-                                        + "$")
+                           | selectattr("hw_folder", "search", vm.folder)
                            | list -%}
     {%- endif %}
 
     {%- if vm_facts | length == 1 -%}
         {%- set vm_exists = true -%}
+        {%- set vm_ansible_current_date = "%Y-%m-%d %H:%M:%S" | strftime(ansible_facts.date_time.epoch) | to_datetime -%}
         {%- set vm_vmware_annotation = vm_facts.0.annotation | from_yaml -%}
         {%- set vm_vmware_power_status = vm_facts.0.hw_power_status | lower -%}
-        {%- set vm_ansible_state = vm_vmware_annotation.ansible_state | default("provisioned") | lower -%}
-        {%- set vm_ansible_creation_date = vm_vmware_annotation.creation_date | to_datetime -%}
-        {%- set vm_ansible_current_date = "%Y-%m-%d %H:%M:%S" | strftime(ansible_facts.date_time.epoch) | to_datetime -%}
+
+        {%- if vm_vmware_annotation is mapping -%}
+          {%- set vm_ansible_state = vm_vmware_annotation.ansible_state | default("provisioned") | lower -%}
+          {%- set vm_ansible_creation_date = vm_vmware_annotation.creation_date | to_datetime -%}
+        {%- else -%}
+          {%- set vm_ansible_state = "provisioned" -%}
+          {%- set vm_ansible_creation_date = vm_ansible_current_date -%}
+        {%- endif -%}
+
         {%- set vm_ansible_seconds_elapsed = (vm_ansible_current_date - vm_ansible_creation_date).total_seconds() -%}
     {%- else -%}
         {%- set vm_exists = false -%}
@@ -40,6 +42,7 @@
         {%- set ns.to_provisione = ns.to_provisione + [ vm ] -%}
     {%- elif vm_exists
              and vm_vmware_power_status == "poweredon"
+             and vm_ansible_state != "provisioned"
              and (vm_ansible_seconds_elapsed > host_provisioner_stalled_timeout
                   or host_provisioner_force_stalled_removal) -%}
         {%- set ns.stalled = ns.stalled + [ vm ] -%}
