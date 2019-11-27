@@ -18,6 +18,8 @@
   include_role:
     name: amtega.vmware_provisioner
     public: yes
+  when: >-
+    hostvars.localhost.host_provisioner_vmware_vms_filtered.stalled | length > 0
   vars:
     vmware_provisioner_vms: >-
       {{ hostvars.localhost.host_provisioner_vmware_vms_filtered.stalled
