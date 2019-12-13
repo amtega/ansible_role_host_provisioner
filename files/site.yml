@@ -28,6 +28,7 @@
 
 - name: Install new provisioned hosts
   hosts: backends_host
+  gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
@@ -35,6 +36,7 @@
 
 - name: Inventory new provisioned hosts
   hosts: dhcpd_host
+  gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
@@ -42,20 +44,37 @@
 
 - name: Wait for new provisioned hosts to be installed
   hosts: backends_host
+  gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
         host_provisioner_stage: wait
 
-- name: Configure new provisioned hosts
+- name: Start configuration of new provisioned hosts
   hosts: "{{ hostvars[backends_host].host_provisioner_group }}"
+  gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
-        host_provisioner_stage: configure
+        host_provisioner_stage: configure_start
+
+
+  # Here you can apply your custom roles and tasks to new provisioned hosts
+- name: Configure new provisioned hosts
+  hosts: "{{ hostvars[backends_host].host_provisioner_group }}"
+  gather_facts: no
+
+- name: End configuration of new provisioned hosts
+  hosts: "{{ hostvars[backends_host].host_provisioner_group }}"
+  gather_facts: no
+  roles:
+    - role: amtega.host_provisioner
+      vars:
+        host_provisioner_stage: configure_end
 
 - name: Finalize provisioned hosts
   hosts: backends_host
+  gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
@@ -63,6 +82,7 @@
 
 - name: Cleanup dhcp entries used to provisione hosts
   hosts: dhcpd_host
+  gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
@@ -70,7 +90,27 @@
 
 - name: Cleanup cobbler entries used to provisione hosts
   hosts: cobbler_host
+  gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
         host_provisioner_stage: cleanup_cobbler
+
+- name: Refresh inventory
+  hosts: backends_host
+  gather_facts: no
+  tasks:
+    - name: Setup fact with new provisioned hosts
+      set_fact:
+        host_provisioner_new_hosts: >-
+          {{ groups[hostvars[groups.ansible | first].host_provisioner_group] }}
+
+    - name: Refresh inventory
+      meta: refresh_inventory
+
+- name: Clear new provisioned hosts facts
+  hosts: "{{ hostvars[backends_host].host_provisioner_new_hosts }}"
+  gather_facts: no
+  tasks:
+    - name: Clear facts
+      meta: clear_facts
