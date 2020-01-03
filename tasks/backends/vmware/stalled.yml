@@ -21,6 +21,7 @@
   when: >-
     hostvars.localhost.host_provisioner_vmware_vms_filtered.stalled | length > 0
   vars:
+    vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
       {{ hostvars.localhost.host_provisioner_vmware_vms_filtered.stalled
          | map("combine", {"state": "absent"})

@@ -24,3 +24,13 @@ host_provisioner_vmware_vm_overrides:
       device_type: "{{ host_provisioner_vmware_prov_net_type }}"
   annotation: '{{ host_provisioner_vmware_vm_annotation | to_yaml }}'
   state: present
+
+# VMware vms to manage
+
+host_provisioner_vmware_vms_to_manage: >-
+  {{ host_provisioner_vmware_vms
+     + ((host_provisioner_gather_inventory_vm_configs)
+        | ternary(host_provisioner_inventory_vms
+                  | default([])
+                  | flatten,
+                  [])) }}

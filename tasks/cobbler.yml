@@ -14,5 +14,3 @@
       {{ hostvars.localhost.host_provisioner_vmware_cobbler_systems
          | map("combine", { "state": host_provisioner_cobbler_systems_state })
          | list }}
-
-- meta: flush_handlers

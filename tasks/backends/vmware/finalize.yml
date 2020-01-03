@@ -6,6 +6,7 @@
     name: amtega.vmware_provisioner
     public: yes
   vars:
+    vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
       {{ lookup("template", "backends/vmware/vms.yml.j2")
          | from_yaml
@@ -17,5 +18,6 @@
     name: amtega.vmware_provisioner
     public: yes
   vars:
+    vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
       {{ lookup('template', 'backends/vmware/vms.yml.j2') | from_yaml }}

@@ -1,7 +1,7 @@
 {%- set ns = namespace(to_provisione=[], stalled=[]) -%}
 {%- set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server -%}
 
-{%- for vm in  hostvars[host_provisioner_vmware_server].vmware_provisioner_inventory_vms -%}
+{%- for vm in host_provisioner_vmware_vms_to_manage -%}
     {%- if vm.uuid is defined -%}
         {%- set vm_facts = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_detailed_facts
                            | selectattr("uuid", "defined")
