@@ -5,6 +5,18 @@
 # GENERAL SETTINGS
 # ==============================================================================
 
+# List of dicts with the virtual machines to provisione. The dicts must have
+# the same format that vmware_provisioner_vms variable
+# of amtega.vmware_provisioner role
+
+host_provisioner_vmware_vms: []
+
+# If set to true gathers virtual machines configs defined in the inventory from
+# any host present in the ansible `hostvars` variable that contais a variable
+# called `vmware_vm`
+
+host_provisioner_gather_inventory_vm_configs: no
+
 # Provisioning stage that the role is managing. Each stage must be run against
 # an specific host type and in the specific order that is detailed below:
 #
@@ -39,7 +51,11 @@
 #
 # Provisioned hosts (group defined in the variable `host_provisioner_group`):
 #
-#   - configure: run mandatory roles on the new provisioned hosts
+#   - configure_start: start configuration of new provisioned hosts
+#
+# Provisioned hosts (group defined in the variable `host_provisioner_group`):
+#
+#   - configure_end: end configuration of new provisioned hosts
 #
 # Host connected to backends:
 #
@@ -90,7 +106,6 @@ host_provisioner_before_ansible_pause: 10
 # ansible roles
 
 host_provisioner_after_ansible_pause: 10
-
 
 # Maximum number seconds that a host can be in provisioning state before it may
 # be considered stalled

@@ -14,5 +14,3 @@
          | map("combine", { "state": host_provisioner_dhcpd_hosts_state })
          | list }}
     dhcpd_delete_unmanaged: no
-
-- meta: flush_handlers
