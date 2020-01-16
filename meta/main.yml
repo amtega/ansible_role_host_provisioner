@@ -45,7 +45,7 @@ dependencies:
           - cluster
         fact_name: host_provisioner_inventory_vms
         output_type: list
-    when: vmware_provisioner_gather_inventory_vm_configs
+    when: host_provisioner_gather_inventory_vm_configs
 
   - role: amtega.vmware_provisioner
     vars:
