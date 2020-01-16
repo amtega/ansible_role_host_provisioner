@@ -1,0 +1,20 @@
+---
+# Cleanup tasks
+
+- name: Cleanup testing virtual machines
+  hosts: >-
+    {{ host_provisioner_testing_backends_host
+       | default(host_provisioner_testing_single_host) }}
+  tasks:
+    - name: Remove testing virtual machines
+      include_role:
+        name: amtega.vmware_provisioner
+      vars:
+        vm_overrides:
+          state: absent
+          force: yes
+        vmware_provisioner_gather_inventory_vm_configs: no
+        vmware_provisioner_vms: >-
+          {{ host_provisioner_testing_vms
+             | map("combine", vm_overrides)
+             | list }}

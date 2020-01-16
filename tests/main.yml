@@ -1,24 +1,13 @@
 ---
 # Tasks for testing role
 
+- import_playbook: cleanup.yml
+
 - name: Setup testing configuration
   hosts: >-
     {{ host_provisioner_testing_backends_host
        | default(host_provisioner_testing_single_host) }}
   tasks:
-    - name: Cleanup testing virtual machines
-      include_role:
-        name: amtega.vmware_provisioner
-      vars:
-        vm_overrides:
-          state: absent
-          force: yes
-        vmware_provisioner_gather_inventory_vm_configs: no
-        vmware_provisioner_vms: >-
-          {{ host_provisioner_testing_vms
-             | map("combine", vm_overrides)
-             | list }}
-
     - name: Setup testing virtual machines list
       set_fact:
         host_provisioner_vmware_vms: "{{ host_provisioner_testing_vms }}"
@@ -129,3 +118,5 @@
     - role: amtega.host_provisioner
       vars:
         host_provisioner_stage: cleanup_cobbler
+
+- import_playbook: cleanup.yml
