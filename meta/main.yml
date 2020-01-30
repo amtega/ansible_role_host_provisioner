@@ -52,6 +52,7 @@ dependencies:
       vmware_provisioner_gather_inventory_vm_configs: no
       vmware_provisioner_gather_detailed_vm_facts: yes
       vmware_provisioner_manage_inventory_vms: no
+      vmware_provisioner_vms: "{{ host_provisioner_vmware_vms_to_manage }}"
     when: host_provisioner_stage in ["cleanup_stalled", "provisione"]
 
   - role: amtega.bootstrap
