@@ -12,6 +12,7 @@
          | map("combine", host_provisioner_vmware_vm_overrides)
          | map("combine", { "state": "poweredon" })
          | list }}
+    vmware_provisioner_provisione: yes
 
 - name: Pause to give time to the new VMware hosts dhcp client
   pause:
