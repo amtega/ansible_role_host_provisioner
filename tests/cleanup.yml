@@ -18,3 +18,4 @@
           {{ host_provisioner_testing_vms
              | map("combine", vm_overrides)
              | list }}
+        vmware_provisioner_provisione: yes
