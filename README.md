@@ -4,19 +4,6 @@ This is an [Ansible](http://www.ansible.com) role that provisione hosts orchestr
 
 Currently only VMware backend is supported.
 
-The provisioning flow is the following:
-
-1. Using a provisioning backend, create a host (typically a virtual machine) with a single network interface within a provisioning network
-2. Setup a host in the dhcpd server for the host to provisione
-3. Setup a system in cobbler to install the host to provisione
-4. Power on the host to provisione
-5. The host will get a temporary network address form dhcpd server
-6. The host to provisione will be installed using cobbler6.
-7. Apply to the provisioned host a set of mandatory roles (see `host_provisioner_roles_mandatory` variable in `vars/main.yml`)
-8. Using a backend, configure the host with the final network interfaces.
-9. Poweroff the host to provisione
-10. Poweron the host to provisione
-
 ## Requirements
 
 1. A dhcpd host configured with [amtega.dhcpd](https://galaxy.ansible.com/amtega/dhcpd) role. Within this host you need a network for provisioning, which name you must pass to the `host_provisioner_dhcpd_prov_net_name` variable (see `defaults/main.yml` for details)
