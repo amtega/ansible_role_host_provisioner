@@ -1,16 +1,25 @@
 ---
 # Tasks for testing role
 
-- import_playbook: cleanup.yml
+- name: Gather testing virtual machines inventory
+  hosts: "{{ host_provisioner_testing_vms }}"
+  gather_facts: no
 
 - name: Setup testing configuration
   hosts: >-
     {{ host_provisioner_testing_backends_host
        | default(host_provisioner_testing_single_host) }}
+  gather_facts: no
   tasks:
-    - name: Setup testing virtual machines list
+    - name: Configure host provisioner
       set_fact:
-        host_provisioner_vmware_vms: "{{ host_provisioner_testing_vms }}"
+        host_provisioner_vmware_vms: >-
+          {{ host_provisioner_testing_vms
+             | map('extract', hostvars, 'vmware_vm')
+             | list }}
+        host_provisioner_gather_inventory_vm_configs: no
+
+- import_playbook: cleanup_tests.yml
 
 - name: Cleanup stalled hosts and provisione the new ones
   hosts: >-
@@ -119,4 +128,4 @@
       vars:
         host_provisioner_stage: cleanup_cobbler
 
-- import_playbook: cleanup.yml
+- import_playbook: cleanup_tests.yml
