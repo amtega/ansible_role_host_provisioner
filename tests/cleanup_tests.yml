@@ -16,6 +16,9 @@
         vmware_provisioner_gather_inventory_vm_configs: no
         vmware_provisioner_vms: >-
           {{ host_provisioner_testing_vms
+             | map('extract', hostvars, 'vmware_vm')
              | map("combine", vm_overrides)
              | list }}
         vmware_provisioner_provisione: yes
+  tags:
+    - cleanup
