@@ -3,13 +3,13 @@
 
 {%- for vm in host_provisioner_vmware_vms_to_manage -%}
     {%- if vm.uuid is defined -%}
-        {%- set vm_facts = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_detailed_facts
+        {%- set vm_facts = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_detailed_fact
                            | selectattr("uuid", "defined")
                            | selectattr("uuid", "equalto", vm.uuid)
                            | list -%}
     {%- elif vm.name is defined
              and vm.folder is defined -%}
-        {%- set vm_facts = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_detailed_facts
+        {%- set vm_facts = hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_detailed_fact
                            | selectattr("hw_name", "defined")
                            | selectattr("hw_folder", "defined")
                            | selectattr("hw_name", "equalto", vm.name)
