@@ -1,6 +1,6 @@
 {%- set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server %}
 
-{%- set vmware_macs =  hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_basic_facts
+{%- set vmware_macs =  hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_basic_fact
                       | selectattr("mac_address", "defined")
                       | map(attribute="mac_address")
                       | sum(start=[])

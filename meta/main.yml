@@ -50,7 +50,7 @@ dependencies:
   - role: amtega.vmware_provisioner
     vars:
       vmware_provisioner_gather_inventory_vm_configs: no
-      vmware_provisioner_gather_detailed_vm_facts: yes
+      vmware_provisioner_gather_detailed_vm_fact: yes
       vmware_provisioner_manage_inventory_vms: no
       vmware_provisioner_vms: "{{ host_provisioner_vmware_vms_to_manage }}"
       vmware_provisioner_provisione: no
