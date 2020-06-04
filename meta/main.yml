@@ -30,7 +30,6 @@ dependencies:
         centos: 7
         fedora: 29
         rhel: 7
-    when: not dhcpd_deps_resolved | default(false)
 
   - role: amtega.select_hostvars
     vars:
@@ -49,12 +48,25 @@ dependencies:
 
   - role: amtega.vmware_provisioner
     vars:
+      vmware_provisioner_gather_all_basic_vm_fact: >-
+        {{ (host_provisioner_stage == "provisione")
+           | ternary("yes", "no") }}
+      vmware_provisioner_gather_datacenters_fact: no
+      vmware_provisioner_gather_clusters_fact: no
+      vmware_provisioner_gather_datastores_fact: no
       vmware_provisioner_gather_inventory_vm_configs: no
-      vmware_provisioner_gather_detailed_vm_fact: yes
       vmware_provisioner_manage_inventory_vms: no
       vmware_provisioner_vms: "{{ host_provisioner_vmware_vms_to_manage }}"
       vmware_provisioner_provisione: no
     when: host_provisioner_stage in ["cleanup_stalled", "provisione"]
+
+  - role: amtega.cobbler
+    tags:
+      - never
+
+  - role: amtega.dhcpd
+    tags:
+      - never
 
   - role: amtega.bootstrap
     tags:

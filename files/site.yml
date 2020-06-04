@@ -1,13 +1,17 @@
 ---
 # This an expample playbook to use the amtega.host_provisioner role
 
-- name: Cleanup stalled hosts and provisione the new ones
+- name: Cleanup stalled hosts
   hosts: backends_host
   roles:
     - role: amtega.host_provisioner
       vars:
         host_provisioner_stage: cleanup_stalled
 
+- name: Provisione new hosts
+  hosts: backends_host
+  gather_facts: no
+  roles:
     - role: amtega.host_provisioner
       vars:
         host_provisioner_stage: provisione
