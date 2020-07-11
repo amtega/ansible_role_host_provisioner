@@ -9,6 +9,7 @@
     name: amtega.cobbler
     public: yes
   vars:
+    cobbler_systems_only: yes
     cobbler_delete_unmanaged: no
     cobbler_systems: >-
       {{ hostvars.localhost.host_provisioner_vmware_cobbler_systems
