@@ -13,9 +13,10 @@
         vm_overrides:
           state: absent
           force: yes
-        vmware_provisioner_gather_datacenters_fact: no
-        vmware_provisioner_gather_clusters_fact: no
-        vmware_provisioner_gather_datastores_fact: no
+        vmware_provisioner_gather_datacenters_info: no
+        vmware_provisioner_gather_clusters_info: no
+        vmware_provisioner_gather_datastores_info: no
+        vmware_provisioner_gather_folders_info: no
         vmware_provisioner_gather_inventory_vm_configs: no
         vmware_provisioner_vms: >-
           {{ host_provisioner_testing_vms
