@@ -34,22 +34,21 @@ To use the role you must setup a playbook that calls the role multiple times aga
 
 ## Testing
 
-Due to the complexity of the role and the set of involved services, currently it's only posible to run tests aginst a real configured platform as described above. You can use a single host with all services and pass the variable `host_provisioner_testing_single_host` to the tests or, alternatively, use different servers for each service passing the following variables:
+Tests are based on [molecule with docker containers](https://molecule.readthedocs.io/en/latest/installation.html).
 
-- `host_provisioner_testing_backends_host`: server with access to the backends platforms supported (see above for details)
-- `host_provisioner_testing_dhcpd_host`: server with dhcpd service (see above for details)
-- `host_provisioner_testing_cobbler_host`: server with cobbler service (see above for details)
+Due to the complexity of the role and the set of involved services, currently it's only posible to run tests aginst a real configured platform as described above. You must use a host with all services and point the environment variable `HOST_PROVISIONER_TEST_HOST` to this host.
 
-Also, you need to the following variables defined in the inventory:
+You must point variable `HOST_PROVISIONER_TEST_VMS` to json list with the hostnames of the virtual machines to provisione. This testing virtual machines must be configured in an inventory with the structure required by the `amtega.vmware_provisioner` and each host must have their network config defined in the inventory according to `amtega.network_interfaces` role.
 
-- `host_provisioner_testing_vms`: list of dicts with the vms for testing. The structure is the same as the one required by the `amtega.vmware_provisioner` role.
-- Each host in `host_provisioner_testing_vms` must have their network config defined in the inventory according to `amtega.network_interfaces` role.
+To provide the inventory with the testing virtual machines and the required role variables you must fill also these environment variables:
 
-For example, you can run the tests with the following commands:
+- `ANSIBLE_INVENTORY`: path to an inventory
+- `ANSIBLE_VAULT_PASSWORD_FILE`: path to the file containing the vault password required for the previous inventory
 
 ```shell
-$ cd host_provisioner/tests
-$ ansible-playbook main.yml -e single_host=my_single_host
+cd amtega.host_provisioner
+
+HOST_PROVISIONER_TEST_HOST=myhost HOST_PROVISIONER_TEST_VMS="['testingvm1', 'testingvm2']" ANSIBLE_INVENTORY=~/myinventory ANSIBLE_VAULT_PASSWORD_FILE=~/myvaultpassword molecule test --all
 ```
 
 ## License

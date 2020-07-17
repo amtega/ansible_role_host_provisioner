@@ -21,9 +21,10 @@
   when: >-
     hostvars.localhost.host_provisioner_vmware_vms_filtered.stalled | length > 0
   vars:
-    vmware_provisioner_gather_datacenters_fact: no
-    vmware_provisioner_gather_clusters_fact: no
-    vmware_provisioner_gather_datastores_fact: no
+    vmware_provisioner_gather_datacenters_info: no
+    vmware_provisioner_gather_clusters_info: no
+    vmware_provisioner_gather_datastores_info: no
+    vmware_provisioner_gather_folders_info: no
     vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
       {{ hostvars.localhost.host_provisioner_vmware_vms_filtered.stalled

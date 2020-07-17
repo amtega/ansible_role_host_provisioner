@@ -1,10 +1,8 @@
 ---
-# Cleanup tasks
 
-- name: Cleanup testing virtual machines
-  hosts: >-
-    {{ host_provisioner_testing_backends_host
-       | default(host_provisioner_testing_single_host) }}
+- name: Cleanup
+  hosts: testing_backends_host
+  gather_facts: no
   tasks:
     - name: Remove testing virtual machines
       include_role:
@@ -24,5 +22,3 @@
              | map("combine", vm_overrides)
              | list }}
         vmware_provisioner_provisione: yes
-  tags:
-    - cleanup

@@ -48,12 +48,13 @@ dependencies:
 
   - role: amtega.vmware_provisioner
     vars:
-      vmware_provisioner_gather_all_basic_vm_fact: >-
+      vmware_provisioner_gather_all_basic_vm_facts: >-
         {{ (host_provisioner_stage == "provisione")
            | ternary("yes", "no") }}
-      vmware_provisioner_gather_datacenters_fact: no
-      vmware_provisioner_gather_clusters_fact: no
-      vmware_provisioner_gather_datastores_fact: no
+      vmware_provisioner_gather_datacenters_info: no
+      vmware_provisioner_gather_clusters_info: no
+      vmware_provisioner_gather_datastores_info: no
+      vmware_provisioner_gather_folders_info: no
       vmware_provisioner_gather_inventory_vm_configs: no
       vmware_provisioner_manage_inventory_vms: no
       vmware_provisioner_vms: "{{ host_provisioner_vmware_vms_to_manage }}"
