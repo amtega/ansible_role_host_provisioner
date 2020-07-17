@@ -49,8 +49,8 @@ provisioner:
         children:
           testing_backends_host:
             hosts:
-              "${HOST_PROVISIONER_TESTING_HOST}":
-                host_provisioner_testing_vms: ${HOST_PROVISIONER_TESTING_VMS}
+              "${HOST_PROVISIONER_TEST_HOST}":
+                host_provisioner_testing_vms: ${HOST_PROVISIONER_TEST_VMS}
                 host_provisioner_vmware_vms: >-
                   {{ host_provisioner_testing_vms
                      | map('extract', hostvars, 'vmware_vm')
@@ -59,10 +59,10 @@ provisioner:
 
           testing_dhcpd_host:
             hosts:
-              "${HOST_PROVISIONER_TESTING_HOST}":
+              "${HOST_PROVISIONER_TEST_HOST}":
 
           testing_cobbler_host:
             hosts:
-              "${HOST_PROVISIONER_TESTING_HOST}":
+              "${HOST_PROVISIONER_TEST_HOST}":
 verifier:
   name: ansible
