@@ -1,0 +1,68 @@
+---
+
+dependency:
+  name: galaxy
+driver:
+  name: delegated
+  options:
+    managed: False
+    ansible_connection_options:
+      ansible_connection: local
+lint: |
+  set -e
+  export ANSIBLE_ACTION_PLUGINS=$PWD/action_plugins
+  export ANSIBLE_BECOME_PLUGINS=$PWD/become_plugins
+  export ANSIBLE_CACHE_PLUGINS=$PWD/cache_plugins
+  export ANSIBLE_CALLBACK_PLUGINS=$PWD/callback_plugins
+  export ANSIBLE_CLICONF_PLUGINS=$PWD/cliconf_plugins
+  export ANSIBLE_CONNECTION_PLUGINS=$PWD/connection_plugins
+  export ANSIBLE_DOC_FRAGMENT_PLUGINS=$PWD/doc_fragment_plugins
+  export ANSIBLE_FILTER_PLUGINS=$PWD/filter_plugins
+  export ANSIBLE_HTTPAPI_PLUGINS=$PWD/httpapi_plugins
+  export ANSIBLE_INVENTORY_PLUGINS=$PWD/inventory_plugins
+  export ANSIBLE_LIBRARY=$PWD/library
+  export ANSIBLE_LOOKUP_PLUGINS=$PWD/lookup_plugins
+  export ANSIBLE_NETCONF_PLUGINS=$PWD/netconf_plugins
+  export ANSIBLE_STRATEGY_PLUGINS=$PWD/strategy_plugins
+  export ANSIBLE_TERMINAL_PLUGINS=$PWD/terminal_plugins
+  export ANSIBLE_TEST_PLUGINS=$PWD/test_plugins
+  export ANSIBLE_VARS_PLUGINS=$PWD/vars_plugins
+  yamllint .
+  ansible-lint
+  flake8
+platforms:
+  - name: dummy
+provisioner:
+  name: ansible
+  playbooks:
+    cleanup: molecule_cleanup.yml
+  ansible_args:
+    - --inventory=${ANSIBLE_INVENTORY}
+    - --vault-password-file=${ANSIBLE_VAULT_PASSWORD_FILE:-/etc/hostname}
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+      action_plugins: $PWD/action_plugins
+  inventory:
+    hosts:
+      molecule_hosts:
+        children:
+          testing_backends_host:
+            hosts:
+              "${HOST_PROVISIONER_TESTING_HOST}":
+                host_provisioner_testing_vms: ${HOST_PROVISIONER_TESTING_VMS}
+                host_provisioner_vmware_vms: >-
+                  {{ host_provisioner_testing_vms
+                     | map('extract', hostvars, 'vmware_vm')
+                     | list }}
+                host_provisioner_gather_inventory_vm_configs: no
+
+          testing_dhcpd_host:
+            hosts:
+              "${HOST_PROVISIONER_TESTING_HOST}":
+
+          testing_cobbler_host:
+            hosts:
+              "${HOST_PROVISIONER_TESTING_HOST}":
+verifier:
+  name: ansible

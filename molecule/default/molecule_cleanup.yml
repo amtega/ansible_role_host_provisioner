@@ -1,0 +1,24 @@
+---
+
+- name: Cleanup
+  hosts: testing_backends_host
+  gather_facts: no
+  tasks:
+    - name: Remove testing virtual machines
+      include_role:
+        name: amtega.vmware_provisioner
+      vars:
+        vm_overrides:
+          state: absent
+          force: yes
+        vmware_provisioner_gather_datacenters_info: no
+        vmware_provisioner_gather_clusters_info: no
+        vmware_provisioner_gather_datastores_info: no
+        vmware_provisioner_gather_folders_info: no
+        vmware_provisioner_gather_inventory_vm_configs: no
+        vmware_provisioner_vms: >-
+          {{ host_provisioner_testing_vms
+             | map('extract', hostvars, 'vmware_vm')
+             | map("combine", vm_overrides)
+             | list }}
+        vmware_provisioner_provisione: yes
