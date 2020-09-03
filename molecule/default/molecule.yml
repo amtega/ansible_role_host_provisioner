@@ -5,7 +5,7 @@ dependency:
 driver:
   name: delegated
   options:
-    managed: False
+    managed: no
     ansible_connection_options:
       ansible_connection: local
 lint: |
@@ -33,12 +33,13 @@ lint: |
 platforms:
   - name: dummy
 provisioner:
-  name: ansible
   playbooks:
     cleanup: molecule_cleanup.yml
+  name: ansible
   ansible_args:
     - --inventory=${ANSIBLE_INVENTORY}
     - --vault-password-file=${ANSIBLE_VAULT_PASSWORD_FILE:-/etc/hostname}
+    - -e host_provisioner_group=${HOST_PROVISIONER_GROUP}
   config_options:
     defaults:
       callback_whitelist: profile_tasks

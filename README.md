@@ -23,7 +23,7 @@ A list of all the default variables for this role is available in `defaults/main
 The role also setups the following facts:
 
 - `host_provisioner_vmware_vms_filtered`: dict indicating the vmware backend hosts to provisione and the ones considered stalled
-- `host_provisioner_vmware_macs`: dict mapping hostnames with the mac provided by VMware backend
+- `host_provisioner_vmware_macs`: dict mapping hostnames with the macs provided by VMware backend
 - `host_provisioner_vmware_nics`: list of dicts with the nics vmware backend will configure
 - `host_provisioner_vmware_dhcpd_hosts`: list of dicts with the hosts vmware backend will pass to the dhcpd server
 - `host_provisioner_vmware_cobbler_systems`: list of dicts with the systems vmware backend will pass to the cobbler server
@@ -36,9 +36,11 @@ To use the role you must setup a playbook that calls the role multiple times aga
 
 Tests are based on [molecule with docker containers](https://molecule.readthedocs.io/en/latest/installation.html).
 
-Due to the complexity of the role and the set of involved services, currently it's only posible to run tests aginst a real configured platform as described above. You must use a host with all services and point the environment variable `HOST_PROVISIONER_TEST_HOST` to this host.
+Due to the complexity of the role and the set of involved services, currently it's only posible to run tests aginst a real configured platform as described above. You must use a host with all services and set the following environment variables:
 
-You must point variable `HOST_PROVISIONER_TEST_VMS` to json list with the hostnames of the virtual machines to provisione. This testing virtual machines must be configured in an inventory with the structure required by the `amtega.vmware_provisioner` and each host must have their network config defined in the inventory according to `amtega.network_interfaces` role.
+- `HOST_PROVISIONER_TEST_HOST`: host with the provisioning services
+- `HOST_PROVISIONER_TEST_VMS`: json list with the hostnames of the virtual machines to provisione. This testing virtual machines must be configured in an inventory with the structure required by the `amtega.vmware_provisioner` and each host must have their network config defined in the inventory according to `amtega.network_interfaces` role.
+- `HOST_PROVISIONER_GROUP`: group where to put testing virtual machines. See `host_provisioner_group` role variable for details.
 
 To provide the inventory with the testing virtual machines and the required role variables you must fill also these environment variables:
 
@@ -48,7 +50,7 @@ To provide the inventory with the testing virtual machines and the required role
 ```shell
 cd amtega.host_provisioner
 
-HOST_PROVISIONER_TEST_HOST=myhost HOST_PROVISIONER_TEST_VMS="['testingvm1', 'testingvm2']" ANSIBLE_INVENTORY=~/myinventory ANSIBLE_VAULT_PASSWORD_FILE=~/myvaultpassword molecule test --all
+HOST_PROVISIONER_TEST_HOST=myhost HOST_PROVISIONER_TEST_VMS="['testingvm1', 'testingvm2']" HOST_PROVISIONER_GROUP=provisioning_testing ANSIBLE_INVENTORY=~/myinventory ANSIBLE_VAULT_PASSWORD_FILE=~/myvaultpassword molecule test --all
 ```
 
 ## License

@@ -176,7 +176,3 @@ host_provisioner_vmware_dhcp_pause: 30
 # }
 
 host_provisioner_vmware_guest_id_to_cobbler_profile_map: {}
-
-# Number of retries to generate a unique MVware mac address
-
-host_provisioner_vmware_mac_generation_retries: 3
