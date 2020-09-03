@@ -5,7 +5,21 @@
    | map(attribute="instance")
    | list %}
 {% set ns.found = true %}
-"{{ instance.hw_name }}": "{{ instance.hw_eth0.macaddress }}"
+{% set interface_numbers = instance.keys()
+                           | select("search", "^hw_eth[0-9]+$")
+                           | map("regex_replace", "^hw_eth([0-9]+)$", "\\1")
+                           | map("int")
+                           | list
+                           | sort %}
+
+{% set interface_keys = interface_numbers
+                        | map("regex_replace", "^", "hw_eth")
+                        | list %}
+
+"{{ instance.hw_name }}": {{ interface_keys
+                             | map('extract', instance, 'macaddress')
+                             | list
+                             | to_json }}
 {% endfor %}
 
 {% if not ns.found %}

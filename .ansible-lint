@@ -2,3 +2,11 @@
 
 exclude_paths:
   - meta
+  - molecule/default/converge.yml
+  - molecule/default/molecule_cleanup.yml
+  - tasks/backends/vmware/create.yml
+  - tasks/backends/vmware/finalize.yml
+  - tasks/backends/vmware/poweron.yml
+  - tasks/backends/vmware/stalled.yml
+  - tasks/cobbler.yml
+  - tasks/dhcpd.yml

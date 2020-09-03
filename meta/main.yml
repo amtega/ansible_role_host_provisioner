@@ -30,6 +30,7 @@ dependencies:
         centos: 7
         fedora: 29
         redhat: 7
+    when: host_provisioner_stage not in ["configure_start", "configure_end"]
 
   - role: amtega.select_hostvars
     vars:

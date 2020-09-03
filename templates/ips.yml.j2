@@ -17,7 +17,7 @@
 
 {% set macs_dict =  hostvars.localhost.host_provisioner_vmware_macs %}
 {% for hostname in macs_dict.keys() | list %}
-{% if dhcpd_ip_leases[macs_dict[hostname] | lower] is defined %}
-"{{ hostname }}": "{{ dhcpd_ip_leases[macs_dict[hostname] | lower] }}"
+{% if dhcpd_ip_leases[macs_dict[hostname] | first | lower] is defined %}
+"{{ hostname }}": "{{ dhcpd_ip_leases[macs_dict[hostname] | first | lower] }}"
 {% endif %}
 {% endfor %}

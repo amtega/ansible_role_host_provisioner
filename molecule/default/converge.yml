@@ -47,17 +47,28 @@
         host_provisioner_stage: wait
 
 - name: Start configuration of new provisioned hosts
-  hosts: >-
-    {{ hostvars[groups.testing_backends_host | first].host_provisioner_group }}
+  hosts: "{{ host_provisioner_group }}"
   gather_facts: no
   roles:
     - role: amtega.host_provisioner
       vars:
         host_provisioner_stage: configure_start
 
+- name: Configure new provisioned hosts
+  hosts: "{{ host_provisioner_group }}"
+  gather_facts: no
+  roles:
+    - role: amtega.bootstrap
+    - role: amtega.packages
+      vars:
+        packages_load_from_hostvars: no
+        packages_os:
+          all:
+            all:
+              openssh: present
+
 - name: End configuration of new provisioned hosts
-  hosts: >-
-    {{ hostvars[groups.testing_backends_host | first].host_provisioner_group }}
+  hosts: "{{ host_provisioner_group }}"
   gather_facts: no
   roles:
     - role: amtega.host_provisioner

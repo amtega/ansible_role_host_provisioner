@@ -13,7 +13,7 @@
     vmware_provisioner_gather_folders_info: no
     vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
-      {{ lookup("template", "backends/vmware/vms.yml.j2")
+      {{ lookup("template", "backends/vmware/vms_final.yml.j2")
          | from_yaml
          | map("combine", { "state": "present" })
          | list }}
@@ -31,5 +31,5 @@
     vmware_provisioner_gather_folders_info: no
     vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
-      {{ lookup('template', 'backends/vmware/vms.yml.j2') | from_yaml }}
+      {{ lookup('template', 'backends/vmware/vms_final.yml.j2') | from_yaml }}
     vmware_provisioner_provisione: yes

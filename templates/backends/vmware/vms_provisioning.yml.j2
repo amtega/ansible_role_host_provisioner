@@ -1,0 +1,26 @@
+{%- set ns = namespace(vms=[]) -%}
+
+{%- for vm in hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione -%}
+    {% if vm.networks | length > 1 %}
+      {%- set vm_networks = [host_provisioning_vmware_vm_prov_network]
+                            + (vm.networks[1:]
+                               | map("combine", {"start_connected": false})
+                               | list) -%}
+    {% else %}
+      {%- set vm_networks = [host_provisioning_vmware_vm_prov_network] -%}
+    {% endif %}
+
+    {%- set ns.vms = ns.vms
+                     + [(vm | combine({"networks": vm_networks,
+                                       "annotation": "'"
+                                                     + host_provisioner_vmware_vm_annotation
+                                                       | to_json
+                                                     + "'",
+                                       "state": "present"}))] -%}
+{%- endfor -%}
+
+{%- if ns.vms | length > 0 -%}
+  {{- ns.vms | to_json -}}
+{%- else -%}
+  []
+{%- endif -%}

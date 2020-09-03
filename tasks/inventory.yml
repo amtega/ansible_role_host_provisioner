@@ -12,6 +12,8 @@
              "^"
              + hostvars.localhost.host_provisioner_vmware_macs
                [host_provisioner_host_item]
+               | first
+               | lower
              + " .*$")
     | list
     | length > 0

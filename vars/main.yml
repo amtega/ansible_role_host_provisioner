@@ -9,12 +9,10 @@ host_provisioner_vmware_vm_annotation:
     {{ "%Y-%m-%d %H:%M:%S"
         | strftime(ansible_facts.date_time.epoch) }}
 
-host_provisioner_vmware_vm_overrides:
-  networks:
-    - name: "{{ host_provisioner_vmware_prov_net_name }}"
-      device_type: "{{ host_provisioner_vmware_prov_net_type }}"
-  annotation: '{{ host_provisioner_vmware_vm_annotation | to_yaml }}'
-  state: present
+host_provisioning_vmware_vm_prov_network:
+  name: "{{ host_provisioner_vmware_prov_net_name }}"
+  device_type: "{{ host_provisioner_vmware_prov_net_type }}"
+  start_connected: yes
 
 # VMware vms to manage
 

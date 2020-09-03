@@ -13,9 +13,7 @@
     vmware_provisioner_gather_folders_info: no
     vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
-      {{ hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione
-         | map("combine", host_provisioner_vmware_vm_overrides)
-         | list }}
+      {{ lookup("template", "backends/vmware/vms_provisioning.yml.j2") | from_yaml }}
     vmware_provisioner_provisione: yes
 
 - name: Setup facts to manage created VMware hosts mac addresses
