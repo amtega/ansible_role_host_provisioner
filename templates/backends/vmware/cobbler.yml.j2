@@ -2,7 +2,7 @@
 {% set host_provisioner_vmware_server = hostvars.localhost.host_provisioner_vmware_server %}
 
 {% for result in hostvars[host_provisioner_vmware_server].vmware_provisioner_vms_setup_result.results %}
-{% if result.instance is defined %}
+{% if result.instance is defined and result.vm.template | default("") | length == 0 %}
 {% set ns.found = true %}
 - name: "{{ result.instance.hw_eth0.macaddress }}"
   profile: "{{ host_provisioner_vmware_guest_id_to_cobbler_profile_map[result.vm.guest_id] }}"

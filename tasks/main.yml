@@ -28,7 +28,8 @@
           hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione
           | length > 0
 
-    - meta: flush_handlers
+    - name: Flush handlers
+      meta: flush_handlers
 
     - block:
         - include_tasks: install.yml
