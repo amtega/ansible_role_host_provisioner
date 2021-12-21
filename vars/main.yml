@@ -23,3 +23,8 @@ host_provisioner_vmware_vms_to_manage: >-
                   | default([])
                   | flatten,
                   [])) }}
+
+# Backwards compability for direct guest_id map
+
+host_provisioner_vmware_guest_id_to_cobbler_profile_map: >-
+  {{ lookup("template", "backends/vmware/guest_id_to_cobbler.yml.j2") | from_yaml }}
