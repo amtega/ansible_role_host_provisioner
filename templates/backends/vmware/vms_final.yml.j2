@@ -5,21 +5,26 @@
     {%- set network_interfaces = hostvars.localhost.host_provisioner_vmware_nics[vm.name] -%}
 
     {%- for vmware_network in vm.networks | default([]) -%}
-        {# {%- set mac = { "mac": network_interfaces[loop.index0].macaddress } -%} #}
-        {# {%- set vmware_network_with_mac = vmware_network | combine(mac) -%} #}
-        {% if vmware_network.start_connected is undefined %}
+        {%- if vmware_network.start_connected is undefined -%}
           {%- set vmware_network_connected = vmware_network
                                              | combine({"start_connected": true}) -%}
           {%- set ns_vm.vmware_vm_networks = ns_vm.vmware_vm_networks
                                              + [vmware_network_connected] -%}
-        {% else %}
+        {%- else -%}
           {%- set ns_vm.vmware_vm_networks = ns_vm.vmware_vm_networks
                                              + [vmware_network] -%}
-        {% endif %}
+        {%- endif -%}
     {%- endfor -%}
 
+    {%- if vm.guest is defined -%}
+      {%- set guest_id = host_provisioner_vmware_guest_map[vm.guest].vmware_guest_id -%}
+    {%- else -%}
+      {%- set guest_id = vm.guest_id -%}
+    {%- endif -%}
+
     {%- set ns.vms = ns.vms
-                     + [ (vm | combine({ "networks": ns_vm.vmware_vm_networks })) ] -%}
+                     + [ (vm | combine({"guest_id": guest_id,
+                                        "networks": ns_vm.vmware_vm_networks})) ] -%}
 {%- endfor -%}
 
 {%- if ns.vms | length > 0 -%}
