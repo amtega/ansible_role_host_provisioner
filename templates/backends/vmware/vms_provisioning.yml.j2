@@ -10,15 +10,8 @@
       {%- set vm_networks = [host_provisioning_vmware_vm_prov_network] -%}
     {%- endif -%}
 
-    {%- if vm.guest is defined -%}
-      {%- set guest_id = host_provisioner_vmware_guest_map[vm.guest].vmware_guest_id -%}
-    {%- else -%}
-      {%- set guest_id = vm.guest_id -%}
-    {%- endif -%}
-
     {%- set ns.vms = ns.vms
-                     + [(vm | combine({"guest_id": guest_id,
-                                       "networks": vm_networks,
+                     + [(vm | combine({"networks": vm_networks,
                                        "annotation": "'"
                                                      + host_provisioner_vmware_vm_annotation
                                                        | to_json

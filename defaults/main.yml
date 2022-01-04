@@ -8,16 +8,13 @@
 # List of dicts with the virtual machines to provisione. The dicts must have
 # the same format that vmware_provisioner_vms variable
 # of amtega.vmware_provisioner role
-#
-# Additionally virtual machine can use the attribute `guest` pointing to one
-# of the keys defined in `host_provisioner_vmware_guest_map` (see below) instead
-# of using directly the `guest_id` attribute.
 
 host_provisioner_vmware_vms: []
 
 # If set to true gathers virtual machines configs defined in the inventory from
 # any host present in the ansible `hostvars` variable that contais a variable
-# called `vmware_vm`
+# called with the the content of host_provisioner_vmware_vm_config_var detailed
+# below
 
 host_provisioner_gather_inventory_vm_configs: no
 
@@ -161,42 +158,35 @@ host_provisioner_vmware_prov_net_type: vmxnet3
 
 host_provisioner_vmware_dhcp_pause: 30
 
-# Dictionary to map guest to vmware guest_id types and cobbler profiles. The
-# format of the dictionary is this:
+# Dictionary to map VMware guest id types to cobbler profiles. This is used when
+# vmware vm config has no explicit cobbler_profile attribute. The format of the
+# dictionary is this:
 #
 # {
-#  <guest1>:
-#    vmware_guest_id: <guest_id1>
-#    cobbler_profile: <cobbler_profile_1>
-#  <guest2>:
-#    vmware_guest_id: <guest_id2>
-#    cobbler_profile: <cobbler_profile_2>
-#  <guestN>:
-#    vmware_guest_id: <guest_idN>
-#    cobbler_profile: <cobbler_profile_N>
+#  <guest_id_type_1>: <cobbler_profile_1>
+#  <guest_id_type_2>: <cobbler_profile_2>
+#  <guest_id_type_N>: <cobbler_profile_N>
 # }
 #
 # Sample:
 #
 # {
-#  CentOS 6:
-#    vmware_guest_id: centos6_64Guest
-#    cobbler_profile: CentOS-6
-#  CentOS 7:
-#    vmware_guest_id: centos7_64Guest
-#    cobbler_profile: CentOS-7
-#  CentOS 8:
-#    vmware_guest_id: centos7_64Guest
-#    cobbler_profile: CentOS-8
-#  Fedora 33:
-#    vmware_guest_id: fedora64Guest
-#    cobbler_profile: Fedora-Server-33
-#  RHEL 6:
-#    vmware_guest_id: rhel6_64Guest
-#    cobbler_profile: RHEL-6
-#  RHEL 7:
-#    vmware_guest_id: rhel7_64Guest
-#    cobbler_profile: RHEL-7
+#  centos6_64Guest: CentOS-6
+#  centos7_64Guest: CentOS-7
+#  rhel6_64Guest: RHEL-6
+#  rhel7_64Guest: RHEL-7
 # }
 
-host_provisioner_vmware_guest_map: {}
+host_provisioner_vmware_guest_id_to_cobbler_profile_map: {}
+
+# Name of the variable within each virtual machine inventory that contains the
+# vnware settings to use
+
+host_provisioner_vmware_vm_config_var: vmware_vm
+
+# Name of the variable within each virtual machine inventory that contains the
+# cobbler profile to use. If not given the cobber profile to use will be derived
+# from the variable host_provisioner_vmware_guest_id_to_cobbler_profile_map
+# detailed before
+
+host_provisioner_cobbler_profile_var: cobbler_profile

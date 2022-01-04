@@ -1,9 +1,0 @@
-{% set ns = namespace(map={}) %}
-{% for guest_key in host_provisioner_vmware_guest_map.keys() | list %}
-{% set guest = host_provisioner_vmware_guest_map[guest_key] %}
-{% if guest.vmware_guest_id not in ns.map.keys() | list %}
-{% set ns.map = ns.map | combine({guest.vmware_guest_id: guest.cobbler_profile}) %}
-{% endif %}
-{% endfor %}
-
-{{ ns.map | to_json }}
