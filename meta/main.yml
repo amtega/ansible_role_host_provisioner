@@ -37,7 +37,7 @@ dependencies:
     vars:
       select_hostvars_query:
         scope: all
-        pattern: "^vmware_vm$"
+        pattern: "^{{ host_provisioner_vmware_vm_config_var }}$"
         attributes:
           - name
           - datacenter

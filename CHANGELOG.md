@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [1.2.0] - 2022-01-04
+#### Changed
+- Refactored cobbler profiles management and added new role vars.
+
 ### [1.1.0] - 2021-12-21
 #### Changed
 - Refactored guest management map adding new abstraction layer. Related to ansible/playbooks/linux#71
