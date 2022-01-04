@@ -5,8 +5,8 @@
 {% if result.instance is defined and result.vm.template | default("") | length == 0 %}
 {% set ns.found = true %}
 - name: "{{ result.instance.hw_eth0.macaddress }}"
-{% if result.vm.guest is defined %}
-  profile: "{{ host_provisioner_vmware_guest_map[result.vm.guest].cobbler_profile }}"
+{% if hostvars[result.vm.name][host_provisioner_cobbler_profile_var] is defined %}
+  profile: "{{ hostvars[result.vm.name][host_provisioner_cobbler_profile_var] }}"
 {% else %}
   profile: "{{ host_provisioner_vmware_guest_id_to_cobbler_profile_map[result.vm.guest_id] }}"
 {% endif %}

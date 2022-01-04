@@ -16,15 +16,8 @@
         {%- endif -%}
     {%- endfor -%}
 
-    {%- if vm.guest is defined -%}
-      {%- set guest_id = host_provisioner_vmware_guest_map[vm.guest].vmware_guest_id -%}
-    {%- else -%}
-      {%- set guest_id = vm.guest_id -%}
-    {%- endif -%}
-
     {%- set ns.vms = ns.vms
-                     + [ (vm | combine({"guest_id": guest_id,
-                                        "networks": ns_vm.vmware_vm_networks})) ] -%}
+                     + [ (vm | combine({ "networks": ns_vm.vmware_vm_networks })) ] -%}
 {%- endfor -%}
 
 {%- if ns.vms | length > 0 -%}
