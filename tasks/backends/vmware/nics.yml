@@ -1,9 +1,15 @@
 ---
 # Setup fact with VMware hosts NICS
 
-- name: Setup fact with VMware hosts nics
+- name: Setup facts with VMware hosts nics
   set_fact:
-    host_provisioner_vmware_nics: >-
-      {{ lookup("template", "backends/vmware/nics.yml.j2") | from_yaml }}
+    host_provisioner_vmware_nics: "{{ host_provisioner_vmware_nics }}"
+    host_provisioner_nics: >-
+      {{ host_provisioner_nics
+         | default({})
+         | combine(host_provisioner_vmware_nics) }}
   delegate_to: localhost
   delegate_facts: yes
+  vars:
+    host_provisioner_vmware_nics: >-
+      {{ lookup("template", "backends/vmware/nics.yml.j2") | from_yaml }}

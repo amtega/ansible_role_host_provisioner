@@ -5,8 +5,14 @@
   set_fact:
     host_provisioner_dhcpd_server: "{{ inventory_hostname }}"
     host_provisioner_vmware_dhcpd_hosts: >-
-      {{ lookup('template', 'backends/vmware/dhcpd.yml.j2') | from_yaml }}
+      {{ host_provisioner_vmware_dhcpd_hosts }}
+    host_provisioner_dhcpd_hosts: >-
+      {{ host_provisioner_dhcpd_hosts
+         | default([])
+         + host_provisioner_vmware_dhcpd_hosts }}
   delegate_to: localhost
   delegate_facts: yes
   vars:
     host_provisioner_vmware_dhcpd_hosts_state: present
+    host_provisioner_vmware_dhcpd_hosts: >-
+      {{ lookup('template', 'backends/vmware/dhcpd.yml.j2') | from_yaml }}
