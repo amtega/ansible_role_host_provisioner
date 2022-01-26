@@ -23,7 +23,7 @@ provisioner:
     - -e host_provisioner_group=${HOST_PROVISIONER_GROUP}
   config_options:
     defaults:
-      callback_whitelist: profile_tasks
+      callbacks_enabled: profile_tasks
       action_plugins: $PWD/action_plugins
   inventory:
     hosts:

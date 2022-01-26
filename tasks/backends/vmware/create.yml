@@ -19,7 +19,13 @@
 - name: Setup facts to manage created VMware hosts mac addresses
   set_fact:
     host_provisioner_vmware_server: "{{ inventory_hostname }}"
-    host_provisioner_vmware_macs: >-
-      {{ lookup("template", "backends/vmware/macs.yml.j2") | from_yaml }}
+    host_provisioner_vmware_macs: "{{ host_provisioner_vmware_macs }}"
+    host_provisioner_macs: >-
+      {{ host_provisioner_macs
+         | default({})
+         | combine(host_provisioner_vmware_macs) }}
   delegate_to: localhost
   delegate_facts: yes
+  vars:
+    host_provisioner_vmware_macs: >-
+      {{ lookup("template", "backends/vmware/macs.yml.j2") | from_yaml }}

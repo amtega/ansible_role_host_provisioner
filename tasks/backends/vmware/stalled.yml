@@ -7,12 +7,22 @@
   delegate_to: localhost
   delegate_facts: yes
 
-- name: Setup facts to manage filtered VMware hosts
+- name: Setup facts with filtered VMware hosts
   set_fact:
     host_provisioner_vmware_vms_filtered: >-
-      {{ lookup('template', 'backends/vmware/filter.yml.j2') | from_yaml }}
+      {{ host_provisioner_vmware_vms_filtered }}
+
+    host_provisioner_vms_filtered: >-
+      {{ host_provisioner_vms_filtered
+         | default({})
+         | combine(host_provisioner_vmware_vms_filtered,
+                   recursive=True,
+                   list_merge="append") }}
   delegate_to: localhost
   delegate_facts: yes
+  vars:
+    host_provisioner_vmware_vms_filtered: >-
+      {{ lookup('template', 'backends/vmware/filter.yml.j2') | from_yaml }}
 
 - name: Remove stalled VMware hosts
   include_role:

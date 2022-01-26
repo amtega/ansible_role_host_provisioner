@@ -6,15 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### [1.2.0] - 2022-01-04
-#### Changed
+## [1.3.0] - 2022-01-26
+### Added
+- Added new abstracted facts.
+
+### Changed
+- Supported distros. Related to ansible/main#178
+
+## [1.2.0] - 2022-01-04
+### Changed
 - Refactored cobbler profiles management and added new role vars.
 
-### [1.1.0] - 2021-12-21
-#### Changed
+## [1.1.0] - 2021-12-21
+### Changed
 - Refactored guest management map adding new abstraction layer. Related to ansible/playbooks/linux#71
 
-### [1.0.3] - 2021-11-29
-#### Fixed
+## [1.0.3] - 2021-11-29
+### Fixed
 - Fixed cobbler management with template based virtual machines.
 - Fixed tests.

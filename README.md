@@ -22,6 +22,11 @@ A list of all the default variables for this role is available in `defaults/main
 
 The role also setups the following facts:
 
+- `host_provisioner_vms_filtered`: dict indicating hosts backends considered to provisione and the ones considered stalled
+- `host_provisioner_macs`: dict mapping hostnames with the macs provided by all backends
+- `host_provisioner_nics`: list of dicts with the all nics backends will configure
+- `host_provisioner_dhcpd_hosts`: list of dicts with the hosts all backends will pass to the dhcpd server
+- `host_provisioner_cobbler_systems`: list of dicts with the systems vmware backend will pass to the cobbler server
 - `host_provisioner_vmware_vms_filtered`: dict indicating the vmware backend hosts to provisione and the ones considered stalled
 - `host_provisioner_vmware_macs`: dict mapping hostnames with the macs provided by VMware backend
 - `host_provisioner_vmware_nics`: list of dicts with the nics vmware backend will configure
@@ -55,7 +60,7 @@ HOST_PROVISIONER_TEST_HOST=myhost HOST_PROVISIONER_TEST_VMS="['testingvm1', 'tes
 
 ## License
 
-Copyright (C) 2020 AMTEGA - Xunta de Galicia
+Copyright (C) 2022 AMTEGA - Xunta de Galicia
 
 This role is free software: you can redistribute it and/or modify it under the terms of:
 
