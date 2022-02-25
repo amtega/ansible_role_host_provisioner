@@ -4,7 +4,7 @@
 - name: Gather ip addresses given by dhcpd server
   command: dhcp-lease-list
   register: host_provisioner_dhcpd_lease_result
-  changed_when: false
+  changed_when: no
   loop: "{{ hostvars.localhost.host_provisioner_vmware_macs.keys() | list }}"
   until: >-
     host_provisioner_dhcpd_lease_result.stdout_lines
