@@ -38,6 +38,6 @@
     vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
       {{ hostvars.localhost.host_provisioner_vmware_vms_filtered.stalled
-         | map("combine", {"state": "absent", "disk": omit})
+         | map("combine", {"state": "absent"})
          | list }}
     vmware_provisioner_provisione: yes
