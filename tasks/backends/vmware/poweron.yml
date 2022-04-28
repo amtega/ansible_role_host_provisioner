@@ -15,7 +15,7 @@
     vmware_provisioner_vms: >
       {{ lookup("template", "backends/vmware/vms_provisioning.yml.j2")
          | from_yaml
-         | map("combine", {"state": "poweredon", "disk": omit})
+         | map("combine", {"state": "poweredon"})
          | list }}
     vmware_provisioner_provisione: yes
 

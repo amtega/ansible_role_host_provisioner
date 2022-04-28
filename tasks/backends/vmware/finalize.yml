@@ -15,9 +15,10 @@
     vmware_provisioner_vms: >-
       {{ lookup("template", "backends/vmware/vms_final.yml.j2")
          | from_yaml
-         | map("combine", {"state": "present", "disk": omit})
+         | map("combine", {"state": "present"})
          | list }}
     vmware_provisioner_provisione: yes
+    vmware_provisioner_vm_manage_disk: no
 
 - name: Finalize WMware hosts provisioning
   include_role:
@@ -31,8 +32,6 @@
     vmware_provisioner_gather_folders_info: no
     vmware_provisioner_gather_inventory_vm_configs: no
     vmware_provisioner_vms: >-
-      {{ lookup('template', 'backends/vmware/vms_final.yml.j2')
-         | from_yaml
-         | map("combine", {"disk": omit})
-         | list }}
+      {{ lookup('template', 'backends/vmware/vms_final.yml.j2') | from_yaml }}
     vmware_provisioner_provisione: yes
+    vmware_provisioner_vm_manage_disk: no
