@@ -76,7 +76,7 @@ host_provisioner_stage:
 # Credentials to use for provisioning
 
 host_provisioner_ansible_user: root
-host_provisioner_ansible_password: password
+host_provisioner_ansible_password: password  # pragma: allowlist secret
 host_provisioner_ansible_become: no
 host_provisioner_ansible_become_method: su
 host_provisioner_ansible_become_user: root
@@ -125,6 +125,11 @@ host_provisioner_force_stalled_removal: no
 # Name of the dhcp net to use during provisioning
 
 host_provisioner_dhcpd_prov_net_name: provisioning
+
+# Retries and delay during gathering of the address given to hosts
+
+host_provisioner_dhcpd_ip_gathering_retries: 10
+host_provisioner_dhcpd_ip_gathering_delay: 10
 
 # ==============================================================================
 # IPTABLES SETTINGS

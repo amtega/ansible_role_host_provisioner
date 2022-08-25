@@ -2,7 +2,7 @@
 # Setup facts to manage VMware provisioned hosts dhcpd entries
 
 - name: Setup facts to manage VMware provisioned hosts dhcpd entries
-  set_fact:
+  ansible.builtin.set_fact:
     host_provisioner_dhcpd_server: "{{ inventory_hostname }}"
     host_provisioner_vmware_dhcpd_hosts: >-
       {{ host_provisioner_vmware_dhcpd_hosts }}

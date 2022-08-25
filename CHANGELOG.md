@@ -4,36 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## 1.5.0 (2022-08-25)
 
-## [1.4.2] - 2022-04-28
-### Fixed
-- Fixed disk provisioning in several tasks. Related to ansible/playbooks/linux#86
+### Fix
 
-## [1.4.1] - 2022-04-27
-### Fixed
-- Skip direct disk provisioning in several tasks. Related to ansible/playbooks/linux#86
+- **global**: fix coding standards
 
-## [1.4.0] - 2022-02-25
-### Changed
-- Improved performance.
+### Feat
 
-## [1.3.0] - 2022-01-26
-### Added
-- Added new abstracted facts.
-
-### Changed
-- Supported distros. Related to ansible/main#178
-
-## [1.2.0] - 2022-01-04
-### Changed
-- Refactored cobbler profiles management and added new role vars.
-
-## [1.1.0] - 2021-12-21
-### Changed
-- Refactored guest management map adding new abstraction layer. Related to ansible/playbooks/linux#71
-
-## [1.0.3] - 2021-11-29
-### Fixed
-- Fixed cobbler management with template based virtual machines.
-- Fixed tests.
+- **dhcpd**: parametrize retries and delay during ip gathering
