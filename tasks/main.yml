@@ -1,25 +1,27 @@
 ---
 # Role tasks
 
-- block:
+- name: Provisione hosts
+  block:
     - name: Setup fact to optimize further runs
-      set_fact:
+      ansible.builtin.set_fact:
         host_provisioner_deps_resolved: yes
 
-    - include_tasks: stalled.yml
+    - ansible.builtin.include_tasks: stalled.yml
       when:
         - host_provisioner_stage == "cleanup_stalled"
 
-    - block:
-        - include_tasks: create.yml
+    - name: Create host and setup dhcpd / cobber
+      block:
+        - ansible.builtin.include_tasks: create.yml
           when: host_provisioner_stage == "provisione"
 
-        - include_tasks: dhcpd.yml
+        - ansible.builtin.include_tasks: dhcpd.yml
           when: host_provisioner_stage == "setup_dhcp"
           vars:
             host_provisioner_dhcpd_hosts_state: present
 
-        - include_tasks: cobbler.yml
+        - ansible.builtin.include_tasks: cobbler.yml
           when: host_provisioner_stage == "setup_cobbler"
           vars:
             host_provisioner_cobbler_systems_state: present
@@ -29,33 +31,34 @@
           | length > 0
 
     - name: Flush handlers
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
 
-    - block:
-        - include_tasks: install.yml
+    - name: Install and configure host
+      block:
+        - ansible.builtin.include_tasks: install.yml
           when: host_provisioner_stage == "install"
 
-        - include_tasks: inventory.yml
+        - ansible.builtin.include_tasks: inventory.yml
           when: host_provisioner_stage == "inventory"
 
-        - include_tasks: wait.yml
+        - ansible.builtin.include_tasks: wait.yml
           when: host_provisioner_stage == "wait"
 
-        - include_tasks: configure_start.yml
+        - ansible.builtin.include_tasks: configure_start.yml
           when: host_provisioner_stage == "configure_start"
 
-        - include_tasks: configure_end.yml
+        - ansible.builtin.include_tasks: configure_end.yml
           when: host_provisioner_stage == "configure_end"
 
-        - include_tasks: finalize.yml
+        - ansible.builtin.include_tasks: finalize.yml
           when: host_provisioner_stage == "finalize"
 
-        - include_tasks: dhcpd.yml
+        - ansible.builtin.include_tasks: dhcpd.yml
           vars:
             host_provisioner_dhcpd_hosts_state: absent     ,
           when: host_provisioner_stage == "cleanup_dhcp"
 
-        - include_tasks: cobbler.yml
+        - ansible.builtin.include_tasks: cobbler.yml
           vars:
             host_provisioner_cobbler_systems_state: absent
           when: host_provisioner_stage == "cleanup_cobbler"

@@ -5,7 +5,7 @@
   gather_facts: no
   tasks:
     - name: Remove testing virtual machines
-      include_role:
+      ansible.builtin.include_role:
         name: amtega.vmware_provisioner
       vars:
         vm_overrides:

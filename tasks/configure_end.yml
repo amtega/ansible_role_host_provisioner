@@ -2,15 +2,15 @@
 # End configuration of provisioned hosts
 
 - name: Pause after applying ansible
-  pause:
+  ansible.builtin.pause:
     seconds: "{{ host_provisioner_after_ansible_pause }}"
 
 - name: Release dhcp address
-  command: /usr/sbin/dhclient -r
+  ansible.builtin.command: /usr/sbin/dhclient -r
   changed_when: yes
 
 - name: Halt provisioned hosts
-  shell: >-
+  ansible.builtin.shell: >-
     sleep 3
     && /usr/sbin/shutdown -h now 'Ansible triggered a halt'
   args:

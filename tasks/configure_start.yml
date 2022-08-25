@@ -1,9 +1,9 @@
 ---
 # Start configuration of provisioned hosts
 
-- include_tasks: backends/vmware/nics.yml
+- ansible.builtin.include_tasks: backends/vmware/nics.yml
   when: hostvars.localhost.host_provisioner_vmware_server is defined
 
 - name: Pause before applying ansible
-  pause:
+  ansible.builtin.pause:
     seconds: "{{ host_provisioner_before_ansible_pause }}"

@@ -2,7 +2,7 @@
 # Finalize VMware hosts provisioning
 
 - name: Finalize VMware hosts config
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.vmware_provisioner
     public: yes
   vars:
@@ -21,7 +21,7 @@
     vmware_provisioner_vm_manage_disk: no
 
 - name: Finalize WMware hosts provisioning
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.vmware_provisioner
     public: yes
   vars:

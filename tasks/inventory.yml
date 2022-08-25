@@ -2,7 +2,7 @@
 # Add provisioned hosts to in-memory inventory
 
 - name: Gather ip addresses given by dhcpd server
-  command: dhcp-lease-list
+  ansible.builtin.command: dhcp-lease-list
   register: host_provisioner_dhcpd_lease_result
   changed_when: no
   loop: "{{ hostvars.localhost.host_provisioner_vmware_macs.keys() | list }}"
@@ -17,19 +17,19 @@
              + " .*$")
     | list
     | length > 0
-  retries: 10
-  delay: 3
+  retries: "{{ host_provisioner_dhcpd_ip_gathering_retries }}"
+  delay: "{{ host_provisioner_dhcpd_ip_gathering_delay }}"
   loop_control:
     loop_var: host_provisioner_host_item
     label: "{{ host_provisioner_host_item }}"
 
 - name: Setup fact with ip addresses given by dhcpd server
-  set_fact:
+  ansible.builtin.set_fact:
     host_provisioner_dhcpd_ips: >-
       {{ lookup('template', 'ips.yml.j2') | from_yaml }}
 
 - name: Add provisioned hosts to in-memory inventory
-  add_host:
+  ansible.builtin.add_host:
     name: "{{ host_provisioner_host_ip_item.key }}"
     ansible_host: "{{ host_provisioner_host_ip_item.value }}"
     ansible_user: "{{ host_provisioner_ansible_user }}"
@@ -41,7 +41,7 @@
     ansible_become_pass: "{{ host_provisioner_ansible_become_pass }}"
     iptables_ssh_zone: "{{ host_provisioner_iptables_ssh_zone }}"
     iptables_ssh_interface: "{{ host_provisioner_iptables_ssh_interface }}"
-    groups: "{{ [ host_provisioner_group ] }}"
+    groups: "{{ [host_provisioner_group] }}"
   changed_when: no
   loop: "{{ host_provisioner_dhcpd_ips | from_yaml | dict2items }}"
   loop_control:

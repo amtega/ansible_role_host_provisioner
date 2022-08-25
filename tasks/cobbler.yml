@@ -1,11 +1,11 @@
 ---
 # Setup cobbler for hosts to provisione
 
-- include_tasks: backends/vmware/cobbler.yml
+- ansible.builtin.include_tasks: backends/vmware/cobbler.yml
   when: hostvars.localhost.host_provisioner_vmware_server is defined
 
 - name: Setup cobbler for hosts to provisione
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.cobbler
     public: yes
   vars:
@@ -13,5 +13,5 @@
     cobbler_delete_unmanaged: no
     cobbler_systems: >-
       {{ hostvars.localhost.host_provisioner_vmware_cobbler_systems
-         | map("combine", { "state": host_provisioner_cobbler_systems_state })
+         | map("combine", {"state": host_provisioner_cobbler_systems_state})
          | list }}
