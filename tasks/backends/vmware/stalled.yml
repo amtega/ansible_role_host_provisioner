@@ -2,13 +2,13 @@
 # Remove stalled vmware hosts and setup related facts
 
 - name: Setup facts with VMware server
-  set_fact:
+  ansible.builtin.set_fact:
     host_provisioner_vmware_server: "{{ inventory_hostname }}"
   delegate_to: localhost
   delegate_facts: yes
 
 - name: Setup facts with filtered VMware hosts
-  set_fact:
+  ansible.builtin.set_fact:
     host_provisioner_vmware_vms_filtered: >-
       {{ host_provisioner_vmware_vms_filtered }}
 
@@ -25,7 +25,7 @@
       {{ lookup('template', 'backends/vmware/filter.yml.j2') | from_yaml }}
 
 - name: Remove stalled VMware hosts
-  include_role:
+  ansible.builtin.include_role:
     name: amtega.vmware_provisioner
     public: yes
   when: >-

@@ -1,5 +1,5 @@
 ---
 # Finalize VMware hosts provisioning
 
-- include_tasks: backends/vmware/finalize.yml
+- ansible.builtin.include_tasks: backends/vmware/finalize.yml
   when: hostvars.localhost.host_provisioner_vmware_server is defined

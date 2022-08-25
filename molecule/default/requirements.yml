@@ -1,4 +1,10 @@
 ---
 
-roles: []
+roles:
+  - name: amtega.bootstrap
+    version: master
+
+  - name: amtega.packages
+    version: master
+
 collections: []

@@ -126,6 +126,11 @@ host_provisioner_force_stalled_removal: no
 
 host_provisioner_dhcpd_prov_net_name: provisioning
 
+# Retries and delay during gathering of the address given to hosts
+
+host_provisioner_dhcpd_ip_gathering_retries: 10
+host_provisioner_dhcpd_ip_gathering_delay: 10
+
 # ==============================================================================
 # IPTABLES SETTINGS
 # ==============================================================================
