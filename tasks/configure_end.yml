@@ -5,8 +5,14 @@
   ansible.builtin.pause:
     seconds: "{{ host_provisioner_after_ansible_pause }}"
 
+- name: Check if dhcp client is available
+  ansible.builtin.stat:
+    path: /usr/sbin/dhclient
+  register: host_provisioner_check_dhclient_result
+
 - name: Release dhcp address
   ansible.builtin.command: /usr/sbin/dhclient -r
+  when: host_provisioner_check_dhclient_result.stat.exists
   changed_when: yes
 
 - name: Halt provisioned hosts
