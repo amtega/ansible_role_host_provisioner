@@ -8,6 +8,11 @@
 # List of dicts with the virtual machines to provisione. The dicts must have
 # the same format that vmware_provisioner_vms variable
 # of amtega.vmware_provisioner role
+#
+# For vmware backend for each vm you can indicate the name of the network for
+# provisioning using the attribute vmware_prov_net_name. If not given the global
+# value defined in host_provisioner_vmware_prov_net_name (see below) will be
+# used
 
 host_provisioner_vmware_vms: []
 
@@ -150,7 +155,8 @@ host_provisioner_iptables_ssh_interface: eth0
 # VMWARE BACKEND SETTINGS
 # ==============================================================================
 
-# VMWare Provisioning network device name
+# VMWare Provisioning network device name if not given specifically for the
+# vm with the attribute vmware_prov_net_name
 
 host_provisioner_vmware_prov_net_name: provisioning
 
