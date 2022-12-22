@@ -2,6 +2,10 @@
 
 {%- for vm in hostvars.localhost.host_provisioner_vmware_vms_filtered.to_provisione -%}
     {%- if vm.networks | length > 1 -%}
+      {%- set host_provisioning_vmware_vm_prov_network =
+                host_provisioning_vmware_vm_prov_network_attrs
+                | combine({"name": vm.vmware_prov_net_name
+                                   | default(host_provisioner_vmware_prov_net_name)}) %}
       {%- set vm_networks = [host_provisioning_vmware_vm_prov_network]
                             + (vm.networks[1:]
                                | map("combine", {"start_connected": false})

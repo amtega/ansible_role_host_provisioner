@@ -9,8 +9,7 @@ host_provisioner_vmware_vm_annotation:
     {{ "%Y-%m-%d %H:%M:%S"
         | strftime(ansible_facts.date_time.epoch) }}
 
-host_provisioning_vmware_vm_prov_network:
-  name: "{{ host_provisioner_vmware_prov_net_name }}"
+host_provisioning_vmware_vm_prov_network_attrs:
   device_type: "{{ host_provisioner_vmware_prov_net_type }}"
   start_connected: yes
 
